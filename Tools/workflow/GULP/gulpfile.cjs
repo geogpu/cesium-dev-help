@@ -38,6 +38,7 @@ const gulp = require('gulp')
 
 const packageJson = require('../../../package.json')
 let version = packageJson.version
+let name = packageJson.name
 if (/\.0$/.test(version)) {
   version = version.substring(0, version.length - 2)
 }
@@ -61,6 +62,7 @@ gulp.task('build-configTemplate0', function (test) {
 
 function createEachPGJs() {
   let contents = `export var VERSION = '${version}';\n`
+  contents += `export var NAME = '${name}';\n`
   globby.sync(sourceFiles).forEach(function (file) {
     file = path.relative('Source', file)
 
@@ -81,5 +83,6 @@ function createEachPGJs() {
       os.EOL
   })
 
-  fs.writeFileSync('Source/Cesium.js', contents)
+  // fs.writeFileSync('Source/Cesium.js', contents)
+  fs.writeFileSync(name + '.js', contents)
 }

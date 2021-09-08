@@ -1,5 +1,5 @@
 {
-  "name": "rollupTemplate",
+  "name": "cesiumplugin",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -22,7 +22,6 @@
     "rollup": "^2.56.1"
   },
   "dependencies": {
-    "exceljs": "^4.3.0",
-    "smb2": "^0.2.11"
+    "eslint": "^7.32.0"
   }
 }

@@ -1,5 +1,5 @@
 // var viewer = new Cesium.Viewer("cesiumContainer");
-import { InitViewer } from "../../../cesiumEx/AppUtils/init/initViewer.js";
+import { InitViewer } from "../../../../src/cesiumplugin/core/init/initViewer.js";
 
 function initSimple() {
 

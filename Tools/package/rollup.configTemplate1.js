@@ -1,5 +1,5 @@
 export default {
-  input: 'src/template1/index.js', //指定入口文件
+  input: 'src/cesiumplugin/cesiumplugin.js', //指定入口文件
   output: [
     // {
     //   //输出文件配置
@@ -8,7 +8,7 @@ export default {
     // },
     {
       format: 'esm',
-      file: 'dist/template1.mjs', //输出到指定的文件夹
+      file: 'dist/cesiumplugin.mjs', //输出到指定的文件夹
     },
   ],
 }

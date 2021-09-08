@@ -3,9 +3,9 @@ import { TestDataAdd } from "./dataAdd/TestDataAdd.js";
 import { TestInteraction } from "./interaction/TestInteraction.js";
 
 
-import { MouseListen } from "../../cesiumEx/AppUtils/control/mouse/MouseListen.js";
-import { BaseDraw } from "../../cesiumEx/AppUtils/draw/mouse/BaseDraw.js";
-import { HoleDraw } from "../../cesiumEx/AppUtils/draw/mouse/HoleDraw.js";
+import { MouseListen } from "../../../src/cesiumplugin/core/control/mouse/MouseListen.js";
+import { BaseDraw } from "../../../src/cesiumplugin/core/draw/mouse/BaseDraw.js";
+import { HoleDraw } from "../../../src/cesiumplugin/core/draw/mouse/HoleDraw.js";
 import { ConstControl } from "./draw/ConstControl.js";
 
 

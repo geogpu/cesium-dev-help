@@ -1,8 +1,8 @@
-import { ClippingPlanesByGeom } from '../../../cesiumEx/AppUtils/primitives/clipPlanes/ClippingPlanesByGeom.js'
-import { CameraPro } from '../../../cesiumEx/AppUtils/control/camera/CameraPro.js'
-import { RenderGlb } from '../../../cesiumEx/AppUtils/primitives/renderModel/RenderGlb.js'
-import { LocalAndWorldTransform } from '../../../cesiumEx/AppUtils/translate/LocalAndWorldTransform.js'
-import { RenderSimple } from '../../../cesiumEx/AppUtils/primitives/renderGeom/RenderSimple.js'
+import { ClippingPlanesByGeom } from '../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js'
+import { CameraPro } from '../../../../src/cesiumplugin/core/control/camera/CameraPro.js'
+import { RenderGlb } from '../../../../src/cesiumplugin/core/primitives/renderModel/RenderGlb.js'
+import { LocalAndWorldTransform } from '../../../../src/cesiumplugin/core/translate/LocalAndWorldTransform.js'
+import { RenderSimple } from '../../../../src/cesiumplugin/core/primitives/renderGeom/RenderSimple.js'
 
 /**
  * 测试数据添加
