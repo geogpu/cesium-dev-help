@@ -1,0 +1,28 @@
+{
+  "name": "rollupTemplate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "yarn rollup ./src/index.js  --format iife --file dist/bundle.js",
+    "build-configTemplate": "yarn rollup --c rollup.configTemplate0.js yarn rollup --c rollup.configTemplate1.js",
+    "build-configTemplate0": "yarn rollup --c Tools/package/rollup.configTemplate0.js",
+    "build-configTemplate1": "yarn rollup --c Tools/package/rollup.configTemplate1.js",
+    "test-js0": "node DividePolygonsIntoTriangles.js",
+    "test-js1": "node DividePolygonsIntoTriangles.js",
+    "flow_v": "node Tools/workflow/qkflow.js version",
+    "wx-test": "gulp wx-test",
+    "package_namespace": "gulp pg-np",
+    "start":"node excelDeal.js"
+  },
+  "devDependencies": {
+    "globby": "^12.0.1",
+    "gulp": "^4.0.2",
+    "rollup": "^2.56.1"
+  },
+  "dependencies": {
+    "exceljs": "^4.3.0",
+    "smb2": "^0.2.11"
+  }
+}
