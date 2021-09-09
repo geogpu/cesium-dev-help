@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import { ClippingPlanesByGeom } from '../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js'
 import { CameraPro } from '../../../../src/cesiumplugin/core/control/camera/CameraPro.js'
 import { RenderGlb } from '../../../../src/cesiumplugin/core/primitives/renderModel/RenderGlb.js'
@@ -13,6 +15,7 @@ class TestDataAdd {
     this.tileset = null
     this.model = null
     this.terrain = null
+
     // console.log(this.viewer.scene)
   }
 
@@ -27,6 +30,7 @@ class TestDataAdd {
 
     this.tileset = this.viewer.scene.primitives.add(
       new Cesium.Cesium3DTileset({
+
         // url: '../../../data/freedata/SampleData/Cesium3DTiles/Batched/BatchedColors/tileset.json'
         // url: '../../../data/freedata/SampleData/Cesium3DTiles/Classification/Photogrammetry/tileset.json'
         // url: '../data/test/BHZ_GJ_FL_98.json',
@@ -40,6 +44,7 @@ class TestDataAdd {
         show: !false,
       })
     )
+
     // 云层？？雾
 
     this.viewer.scene.globe.depthTestAgainstTerrain = true
@@ -62,6 +67,7 @@ class TestDataAdd {
       1.0, //x, y, z, 1.0
     ])
     this.tileset._modelMatrix = m
+
     // test
     window.tileset = this.tileset
 
@@ -84,6 +90,7 @@ class TestDataAdd {
 
     this.tilesetOSM = this.viewer.scene.primitives.add(
       new Cesium.Cesium3DTileset({
+
         // url: '../../../data/freedata/SampleData/Cesium3DTiles/Batched/BatchedColors/tileset.json'
         // url: '../../../data/freedata/SampleData/Cesium3DTiles/Classification/Photogrammetry/tileset.json'
 
@@ -96,9 +103,11 @@ class TestDataAdd {
         show: !false,
       })
     )
+
     // 云层？？雾
 
     this.viewer.scene.globe.depthTestAgainstTerrain = true
+
     // let m = Cesium.Matrix4.fromArray([
     //   1.0, 0.0, 0.0, 0.0,
     //   0.0, 1.0, 0.0, 0.0,
@@ -128,6 +137,7 @@ class TestDataAdd {
       requestWaterMask: true, // required for water effects
       // requestVertexNormals: true, // required for terrain lighting
     })
+
     // this.viewer.terrainProvider = new Cesium.CesiumTerrainProvider({
     //   url: "http://192.168.0.253/DEM/common",
     //   // requestWaterMask: true
@@ -164,6 +174,7 @@ class TestDataAdd {
       100
     )
     url = '../data/freedata/cesium_model/tg.gltf'
+
     // url = '../data/freedata/cesium_model/tg_b.glb'
     position = {
       x: 1532250.593519417,
@@ -183,6 +194,7 @@ class TestDataAdd {
 
   addTestEntity() {
     let viewer = this.viewer
+
     // 简化xy维度分量曲线拟合（简单正弦替代） h自变量
     // let geomPositionsDown = [
     // {
@@ -590,20 +602,26 @@ class TestDataAdd {
     let timeMove = 5 //晃动时间
 
     // 起始时间
-    var start = Cesium.JulianDate.fromDate(new Date(2017, 7, 11))
+    let start = Cesium.JulianDate.fromDate(new Date(2017, 7, 11))
+
     // 结束时间
-    var stop = Cesium.JulianDate.addSeconds(start, 100, new Cesium.JulianDate())
+    let stop = Cesium.JulianDate.addSeconds(start, 100, new Cesium.JulianDate())
 
     // 设置始时钟始时间
     this.viewer.clock.startTime = start.clone()
+
     // 设置时钟当前时间
     this.viewer.clock.currentTime = start.clone()
+
     // 设置始终停止时间
     this.viewer.clock.stopTime = stop.clone()
+
     // 时间速率，数字越大时间过的越快
     this.viewer.clock.multiplier = 1
+
     // 时间轴
     this.viewer.timeline.zoomTo(start, stop)
+
     // // 循环执行,即为2，到达终止时间，重新从起点时间开始
     // this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP;
 
@@ -661,6 +679,7 @@ class TestDataAdd {
 export { TestDataAdd }
 
 class MoveEntityCollection {
+
   /**
    * 同样动画
    * @param {*} viewer
@@ -677,6 +696,7 @@ class MoveEntityCollection {
   }
 
   add(geomPositionsDown, height, precision) {
+
     // let Cartesian3ZERO = { x: 0, y: 0, Z: 0 }
     // // 局部ENU坐标系 转换
     let localAndWorldTransform = new LocalAndWorldTransform(
@@ -703,6 +723,7 @@ class MoveEntityCollection {
       while (h < height) {
         thisPointPositionLocal.z = h
         console.log(thisPointPositionLocal.z)
+
         /**********************x*********************** */
         let newPillarsPositoin = localAndWorldTransform.localToWorldCoordinates(
           thisPointPositionLocal
@@ -711,6 +732,7 @@ class MoveEntityCollection {
         h += precision
         j++
       }
+
       // 顶端单独处理
       /**********************x*********************** */
       thisPointPositionLocal.z = height
@@ -718,9 +740,11 @@ class MoveEntityCollection {
         thisPointPositionLocal
       )
       pillarsPositoins.push(newPillarsPositoin)
+
       // RenderSimple.simplePointByPrimitives(this.viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection()), pillarsPositoins[j], 2, Cesium.Color.fromAlpha(Cesium.Color.RED, 0.5), 3.0)
     }
-    console.log('pillarsPositoinsArrays', pillarsPositoinsArrays)
+
+    // console.log('pillarsPositoinsArrays', pillarsPositoinsArrays)
 
     // 绑定并初始化
     for (let i = 0; i < groundPositionsLength; i++) {
@@ -728,6 +752,7 @@ class MoveEntityCollection {
       let thisPillarsPositoins = pillarsPositoinsArrays[i]
       let nextPillarsPositoins = pillarsPositoinsArrays[indexNext]
       geomPositionsFullArrays.push([])
+
       // 垂直面和顶面
       for (let j = 0; j < pillarsPositoinsLength; j++) {
         geomPositionsFullArrays[i + 2][j] = thisPillarsPositoins[j]
@@ -737,7 +762,9 @@ class MoveEntityCollection {
       geomPositionsFullArrays[1][i] =
         thisPillarsPositoins[pillarsPositoinsLength - 1]
     }
-    console.log('geomPositionsFullArrays', geomPositionsFullArrays)
+
+    // console.log('geomPositionsFullArrays', geomPositionsFullArrays)
+
     // let geomPositoinsArrays = [geomPositionsDown, []] //总面[底面,上表面，立面]
 
     let pillarsPositoinsArraysClone = JSON.parse(
@@ -762,6 +789,7 @@ class MoveEntityCollection {
           for (let j = 0; j < pillarsPositoinsLength; j++) {
             let pillarsPositoins = pillarsPositoinsArrays[i][j]
             let pillarsPositoinsClone = pillarsPositoinsArraysClone[i][j]
+
             // ENU局部坐标下不同高度位移
             let thisPillarsPositoins =
               localAndWorldTransform.WorldCoordinatesTolocal(pillarsPositoins)
@@ -769,6 +797,7 @@ class MoveEntityCollection {
               localAndWorldTransform.WorldCoordinatesTolocal(
                 pillarsPositoinsClone
               )
+
             // thisPillarsPositoins.x += 1
             // thisPillarsPositoins.x = thisPillarsPositoinsClone.x
             thisPillarsPositoins.x =
@@ -792,13 +821,16 @@ class MoveEntityCollection {
     // // this._mouseMovePointPrimitives.position = geomPositoinsArrays[1][2]
     for (let index = 0; index < geomPositionsFullArrays.length; index++) {
       let mousePolygonGroundEntity = this.entities.add({
+
         // name: 'polygon',
         polygon: {
           hierarchy: new Cesium.CallbackProperty(() => {
+
             // console.log(viewer.clock.currentTime)
             return new Cesium.PolygonHierarchy(geomPositionsFullArrays[index])
           }, false),
           perPositionHeight: true,
+
           // hierarchy: new Cesium.PolygonHierarchy(geomPositoinsArrays[0]),
           material: Cesium.Color.fromAlpha(Cesium.Color.WHITE, 0.8),
         },
@@ -813,7 +845,9 @@ class MoveEntityCollection {
    * @returns
    */
   moveSin(dtime, h) {
-    console.log('dtime', h)
+
+    // console.log('dtime', h)
+
     // y=Asin(ωx+φ)+k
     //画正弦曲线
     //dot 原点
@@ -825,7 +859,8 @@ class MoveEntityCollection {
     let x = dtime + h / 100
     let y =
       (h / 60) * amplitude * Math.sin(palstance * x + initialPhase) + setover
-    console.log('y', y)
+
+    // console.log('y', y)
     return y //单方向偏移量
   }
 }

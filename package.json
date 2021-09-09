@@ -12,16 +12,15 @@
     "test-js0": "node DividePolygonsIntoTriangles.js",
     "test-js1": "node DividePolygonsIntoTriangles.js",
     "flow_v": "node Tools/workflow/qkflow.js version",
-    "wx-test": "gulp wx-test",
-    "package_namespace": "gulp pg-np",
-    "start":"node excelDeal.js"
+    "GULP_LIST": "gulp --tasks",
+    "GULP_CONNECT": "gulp GULP_CONNECT",
+    "GULP_BUILD": "gulp GULP_BUILD",
+    "start": "node excelDeal.js"
   },
   "devDependencies": {
-    "globby": "^12.0.1",
+    "eslint": "^7.32.0",
+    "globby": "^12.0.2",
     "gulp": "^4.0.2",
     "rollup": "^2.56.1"
-  },
-  "dependencies": {
-    "eslint": "^7.32.0"
   }
 }

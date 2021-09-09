@@ -1,5 +1,5 @@
 {
     "flags": {
-        "gulpfile": "Tools/workflow/GULP/gulpfile.cjs"
+        "gulpfile": "Tools/workflow/GULP/gulpfile.js"
     }
 }
