@@ -1,9 +1,0 @@
-class RenderPlanes{
-  constructor(){
-
-  }
-
-
-  terr
-
-}

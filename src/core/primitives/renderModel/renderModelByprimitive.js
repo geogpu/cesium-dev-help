@@ -1,0 +1,3 @@
+class renderModelByprimitive{}
+
+export {renderModelByprimitive}

@@ -1,0 +1,5 @@
+class UsualGeom{
+
+}
+
+export{UsualGeom}

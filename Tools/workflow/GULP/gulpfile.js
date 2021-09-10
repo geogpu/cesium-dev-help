@@ -5,6 +5,7 @@
 // const fs = require("fs");
 import fs from "fs";
 import os from "os";
+import path from "path";
 
 // const path = require("path");
 // const os = require("os");
@@ -15,7 +16,7 @@ import os from "os";
 // const request = require("request");
 
 // const globby = require("globby");
-import {globby} from 'globby';
+import { globby } from 'globby';
 
 // const gulpTap = require("gulp-tap");
 // const gulpUglify = require("gulp-uglify");
@@ -98,7 +99,7 @@ if (/\.0$/.test(version)) {
  * 
  */
 
-let gulpConnect = (cb)=> {
+let gulpConnect = (cb) => {
   console.log('gulp connect succeed')
   cb()
 }
@@ -106,28 +107,46 @@ let gulpConnect = (cb)=> {
 /**
  * 待定
  */
+let coreBasePath = 'src/'
 const sourceFiles = [
-  "Source/**/*.js",
-  "!Source/*.js",
-  "!Source/Workers/**",
-  "!Source/WorkersES6/**",
-  "Source/WorkersES6/createTaskProcessorWorker.js",
-  "!Source/ThirdParty/Workers/**",
-  "!Source/ThirdParty/google-earth-dbroot-parser.js",
-  "!Source/ThirdParty/_*",
+  coreBasePath + '/core/**/*.js', //core下所有js
 ];
 
-let createEachPGJs = async(cb)=>{
+let createEachPGJs = async(cb) => {
   console.log('gulp build list of out interface')
 
-    const paths = await globby(['*.js'], {
-      expandDirectories: true
-    });
-    console.log(paths);
+  const fullPaths = await globby(sourceFiles, {
+
+    // expandDirectories: {
+    //   files: ['cat', 'unicorn', '*.jpg'],
+    //   extensions: ['js']
+    // }
+  });
+  fullPaths.forEach(fullPath => {
+    let file = path.relative(coreBasePath, fullPath) //core\math\ComputationalGeom.js
+    let moduleId = filePathToModuleId(file) //core/math/ComputationalGeom
+    let assignmentName = path.basename(file, path.extname(file))
+    assignmentName = assignmentName.replace(/(\.|-)/g, '_')//ComputationalGeom
+
+     console.log(assignmentName)
+
+    //    contents +=
+    // 'export { default as ' +
+    // assignmentName +
+    // " } from './" +
+    // moduleId +
+    // ".js';" +
+    // os.EOL
+  });
+
   cb()
+}
+
+function filePathToModuleId(moduleId) {
+  return moduleId.substring(0, moduleId.lastIndexOf(".")).replace(/\\/g, "/");
 }
 
 let GULP_CONNECT = gulpConnect;
 let GULP_BUILD = series(createEachPGJs);
 
-export{GULP_CONNECT, GULP_BUILD}
+export { GULP_CONNECT, GULP_BUILD }
