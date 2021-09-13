@@ -1,11 +1,12 @@
 // import { HoleDraw } from "../../../../src/cesiumplugin/core/draw/mouse/HoleDraw.js";
-import { ClippingPlanesByGeom } from "../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js";
-
+// import { ClippingPlanesByGeom } from "../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js";
+import { ClippingPlanesByGeom } from "../../../../src/cesiumplugin.js";
 
 class ConstControl {
   constructor() {}
 
   static drawHole(viewer) {
+
     // let holeDraw = new HoleDraw(viewer)
 
     ClippingPlanesByGeom.setClippingPlanesSimple([viewer.scene.globe],
@@ -14,10 +15,10 @@ class ConstControl {
         { x: -2499148.1215788424, y: 4384693.149035873, z: 3886841.7816859786 },
         { x: -2829675.04101285, y: 4205662.754088855, z: 3858192.5514180525 }
       ], -1)
-  };
-
+  }
 
   static webwork(viewer) {
+
     //     var myTask = `
     //     onmessage = function (e) {
     //         var data = e.data;
@@ -29,9 +30,9 @@ class ConstControl {
 
     //     var blob = new Blob([myTask]);
     //     var myWorker = new Worker(window.URL.createObjectURL(blob));
-    var myWorker = new Worker('work/draw/work.js')
-    myWorker.onmessage = function (e) {
-      var data = e.data;
+    let myWorker = new Worker('work/draw/work.js')
+    myWorker.onmessage = function(e) {
+      let data = e.data;
       console.log('page:', data); // page: [1, 2, 3, "hello"]
       console.log('arr:', arr); // arr: [1, 2, 3]
     };

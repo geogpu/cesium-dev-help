@@ -1,5 +1,6 @@
+/* eslint-disable no-empty */
 import { MouseListen } from "../../control/mouse/MouseListen.js"
-import { RenderSimple } from '../../primitives/renderGeom/RenderSimple.js'
+import { RenderSimple } from '../../renderGeom/RenderSimple.js'
 
 class BaseDraw extends MouseListen {
 
@@ -84,12 +85,8 @@ class BaseDraw extends MouseListen {
     if (this.lineDrawBool && this.mouseLinePrimitive) { this.mouseLinePrimitive.positions = this._clickPositions } //更新线
 
     if (this.polygonDrawBool) {}
-    if (this.lineGroundDrawBool && this.mouseLineGroundEntity) {
-
-    }
-    if (this.polygonGroundDrawBool) {
-
-    }
+    if (this.lineGroundDrawBool && this.mouseLineGroundEntity) {}
+    if (this.polygonGroundDrawBool) {}
   }
 
   set click_LEFT_CLICK(value) {

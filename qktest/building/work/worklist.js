@@ -1,12 +1,9 @@
 /* eslint-disable no-undef */
-import { initSimple } from "./viwerWork/initSimple.js";
-import { TestDataAdd } from "./dataAdd/TestDataAdd.js";
-import { TestInteraction } from "./interaction/TestInteraction.js";
-
-import { MouseListen } from "../../../src/cesiumplugin/core/control/mouse/MouseListen.js";
-import { BaseDraw } from "../../../src/cesiumplugin/core/draw/mouse/BaseDraw.js";
-import { HoleDraw } from "../../../src/cesiumplugin/core/draw/mouse/HoleDraw.js";
-import { ConstControl } from "./draw/ConstControl.js";
+import { initSimple } from "../work/viwerWork/initSimple.js";
+import { TestDataAdd } from "../work/dataAdd/TestDataAdd.js";
+import { TestInteraction } from "../work/interaction/TestInteraction.js";
+import { ConstControl } from "../work/draw/ConstControl.js";
+import { MouseListen, BaseDraw, HoleDraw} from "../../../src/cesiumplugin.js";
 
 function workList() {
 
@@ -25,46 +22,6 @@ function workList() {
     let mouseListen = new MouseListen(viewer)
     let baseDraw = new BaseDraw(viewer)
     let holeDraw = new HoleDraw(viewer)
-
-    // var line = undefined; //全局线对象
-    // var linearr = []; //线的坐标存储
-    // //鼠标点击事件监听
-    // let handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
-    // handler.setInputAction(function (event) {
-    //   //获取世界坐标点    
-    //   var pick = viewer.camera.getPickRay(event.position);
-    //   var cartesian = viewer.scene.globe.pick(pick, viewer.scene);
-    //   //如果世界坐标点存在
-    //   if (cartesian) {
-
-    //     //添加一个线对象 
-    //     if (!line) {
-    //       linearr.push(cartesian)
-    //       line = viewer.entities.add({
-    //         polyline: {
-    //           positions: new Cesium.CallbackProperty(function () {
-    //             return linearr;
-    //           }, false),
-    //           width: 3,
-    //           material: Cesium.Color.RED,
-    //           clampToGround: true,
-    //         }
-    //       })
-    //     }
-    //   }
-    // }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
-    // //鼠标移动事件监听
-    // handler.setInputAction(function (event) {
-    //   var pick = viewer.camera.getPickRay(event.endPosition);
-    //   var cartesian = viewer.scene.globe.pick(pick, viewer.scene);
-    //   if (cartesian) {
-    //     if (line) {
-    //       //考虑在鼠标移动的一瞬间,linearr应该增加一个坐标点,当再次移动时,该坐标点应该更换
-    //       linearr[1] = cartesian;
-    //     }
-    //   }
-    // }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
     let testConfig = [
 
       // 控制
@@ -110,6 +67,12 @@ function workList() {
       { title: '固定值', class: 'leftWorkListTitle' },
       { name: '固定值挖坑', func: () => { ConstControl.drawHole(viewer) }, class: 'leftWorkListButton' },
       { name: 'cesium线程', func: () => { ConstControl.webwork(viewer) }, class: 'leftWorkListButton' },
+
+      // 局部替换动
+      { title: '局部替换动', class: 'leftWorkListTitle' },
+      { name: '视角监测', func: () => { ConstControl.drawHole(viewer) }, class: 'leftWorkListButton' },
+      { name: '视角锥体', func: () => { ConstControl.webwork(viewer) }, class: 'leftWorkListButton' },
+      { name: '动态替换', func: () => { ConstControl.webwork(viewer) }, class: 'leftWorkListButton' },
     ]
     addTest(testConfig, '.leftWorkListBox')
 

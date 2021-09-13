@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-import { ClippingPlanesByGeom } from '../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js'
-import { CameraPro } from '../../../../src/cesiumplugin/core/control/camera/CameraPro.js'
-import { RenderGlb } from '../../../../src/cesiumplugin/core/primitives/renderModel/RenderGlb.js'
-import { LocalAndWorldTransform } from '../../../../src/cesiumplugin/core/translate/LocalAndWorldTransform.js'
-import { RenderSimple } from '../../../../src/cesiumplugin/core/primitives/renderGeom/RenderSimple.js'
+import { ClippingPlanesByGeom, CameraPro, RenderGlb, LocalAndWorldTransform, RenderSimple} from '../../../../src/cesiumplugin.js'
+
+// import { ClippingPlanesByGeom } from '../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js'
+// import { CameraPro } from '../../../../src/cesiumplugin/core/control/camera/CameraPro.js'
+// import { RenderGlb } from '../../../../src/cesiumplugin/core/primitives/renderModel/RenderGlb.js'
+// import { LocalAndWorldTransform } from '../../../../src/cesiumplugin/core/translate/LocalAndWorldTransform.js'
+// import { RenderSimple } from '../../../../src/cesiumplugin/core/primitives/renderGeom/RenderSimple.js'
 
 /**
  * 测试数据添加

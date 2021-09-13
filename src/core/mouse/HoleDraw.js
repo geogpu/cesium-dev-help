@@ -1,8 +1,8 @@
-import { MouseListen } from '../../control/mouse/MouseListen.js'
-import { ClippingPlanesByGeom } from '../../primitives/clipPlanes/ClippingPlanesByGeom.js'
-import { RenderSimple } from '../../primitives/renderGeom/RenderSimple.js'
-import { LocalAndWorldTransform } from '../../translate/LocalAndWorldTransform.js'
-import { ComputationalGeom } from '../../math/ComputationalGeom.js'
+import { MouseListen } from '../../core/control/mouse/MouseListen.js'
+import { ClippingPlanesByGeom } from '../primitives/clipPlanes/ClippingPlanesByGeom.js'
+import { RenderSimple } from '../renderGeom/RenderSimple.js'
+import { LocalAndWorldTransform } from '../translate/LocalAndWorldTransform.js'
+import { ComputationalGeom } from '../../core/math/ComputationalGeom.js'
 
 class HoleDraw extends MouseListen {
 

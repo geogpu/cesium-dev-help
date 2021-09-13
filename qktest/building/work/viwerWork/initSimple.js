@@ -1,12 +1,13 @@
 // var viewer = new Cesium.Viewer("cesiumContainer");
-import { InitViewer } from "../../../../src/cesiumplugin/core/init/initViewer.js";
+// import { InitViewer } from "../../../../src/cesiumplugin.js";
+import { InitViewer } from "../../../../dist/cesiumplugin.mjs";
 
 function initSimple() {
-
 
   let initViewer = InitViewer.getInstance()
   window.initViewer = initViewer
   window.viewer = initViewer.addViewer("cesiumContainer")
+
   // 初始viewer
   let viewer = initViewer.viewers.get("cesiumContainer")
 
@@ -15,7 +16,6 @@ function initSimple() {
   })
 
   viewer.imageryLayers.addImageryProvider(provider);
-
 
   // //cesium世界地形
   // viewer.terrainProvider = Cesium.createWorldTerrain({
@@ -26,13 +26,10 @@ function initSimple() {
   // 开启深度检测
   viewer.scene.globe.depthTestAgainstTerrain = true;
 
-
   // viewer.scene.primitives.remove(tileset)
 }
 
 export { initSimple };
-
-
 
 // https://blog.csdn.net/qq_25064691/article/details/114493038
 // 天地图参看

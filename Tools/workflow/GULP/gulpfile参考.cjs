@@ -134,6 +134,7 @@ const filesToConvertES6 = [
 ];
 
 function rollupWarning(message) {
+
   // Ignore eval warnings in third-party code we don't have control over
   if (message.code === "EVAL" && /protobufjs/.test(message.loc.file)) {
     return;
@@ -156,7 +157,7 @@ function createWorkers() {
       "!Source/Workers/cesiumWorkerBootstrapper.js",
       "!Source/Workers/transferTypedArrayTest.js",
     ])
-    .forEach(function (file) {
+    .forEach(function(file) {
       rimraf.sync(file);
     });
 
@@ -167,7 +168,7 @@ function createWorkers() {
       input: workers,
       onwarn: rollupWarning,
     })
-    .then(function (bundle) {
+    .then(function(bundle) {
       return bundle.write({
         dir: "Build/createWorkers",
         banner:
@@ -175,19 +176,19 @@ function createWorkers() {
         format: "amd",
       });
     })
-    .then(function () {
+    .then(function() {
       return streamToPromise(
         gulp.src("Build/createWorkers/**").pipe(gulp.dest("Source/Workers"))
       );
     })
-    .then(function () {
+    .then(function() {
       rimraf.sync("Build/createWorkers");
     });
 }
 
 async function buildThirdParty() {
   rimraf.sync("Build/createWorkers");
-  globby.sync(filesToLeaveInThirdParty).forEach(function (file) {
+  globby.sync(filesToLeaveInThirdParty).forEach(function(file) {
     rimraf.sync(file);
   });
 
@@ -199,7 +200,7 @@ async function buildThirdParty() {
       plugins: [rollupResolve(), rollupCommonjs()],
       onwarn: rollupWarning,
     })
-    .then(function (bundle) {
+    .then(function(bundle) {
       return bundle.write({
         dir: "Build/createThirdPartyNpm",
         banner:
@@ -207,19 +208,19 @@ async function buildThirdParty() {
         format: "es",
       });
     })
-    .then(function () {
+    .then(function() {
       return streamToPromise(
         gulp
           .src("Build/createThirdPartyNpm/**")
           .pipe(gulp.dest("Source/ThirdParty"))
       );
     })
-    .then(function () {
+    .then(function() {
       rimraf.sync("Build/createThirdPartyNpm");
     });
 }
 
-gulp.task("build", async function () {
+gulp.task("build", async function() {
   mkdirp.sync("Build");
 
   fs.writeFileSync(
@@ -238,16 +239,16 @@ gulp.task("build", async function () {
   return Promise.join(createWorkers(), createGalleryList());
 });
 
-gulp.task("build-watch", function () {
+gulp.task("build-watch", function() {
   return gulp.watch(watchedFiles, gulp.series("build"));
 });
 
-gulp.task("build-ts", function () {
+gulp.task("build-ts", function() {
   createTypeScriptDefinitions();
   return Promise.resolve();
 });
 
-gulp.task("buildApps", function () {
+gulp.task("buildApps", function() {
   return Promise.join(buildCesiumViewer(), buildSandcastle());
 });
 
@@ -270,33 +271,33 @@ gulp.task("build-specs", function buildSpecs() {
         plugins: [externalCesium],
         onwarn: rollupWarning,
       })
-      .then(function (bundle) {
+      .then(function(bundle) {
         return bundle.write({
           file: "Build/Specs/Specs.js",
           format: "iife",
         });
       })
-      .then(function () {
+      .then(function() {
         return rollup
           .rollup({
             input: "Specs/spec-main.js",
             plugins: [removePragmas, externalCesium],
           })
-          .then(function (bundle) {
+          .then(function(bundle) {
             return bundle.write({
               file: "Build/Specs/spec-main.js",
               format: "iife",
             });
           });
       })
-      .then(function () {
+      .then(function() {
         return rollup
           .rollup({
             input: "Specs/karma-main.js",
             plugins: [removePragmas, externalCesium],
             onwarn: rollupWarning,
           })
-          .then(function (bundle) {
+          .then(function(bundle) {
             return bundle.write({
               file: "Build/Specs/karma-main.js",
               name: "karmaMain",
@@ -309,9 +310,9 @@ gulp.task("build-specs", function buildSpecs() {
   return promise;
 });
 
-gulp.task("clean", function (done) {
+gulp.task("clean", function(done) {
   rimraf.sync("Build");
-  globby.sync(filesToClean).forEach(function (file) {
+  globby.sync(filesToClean).forEach(function(file) {
     rimraf.sync(file);
   });
   done();
@@ -321,13 +322,13 @@ function cloc() {
   let cmdLine;
 
   //Run cloc on primary Source files only
-  const source = new Promise(function (resolve, reject) {
+  const source = new Promise(function(resolve, reject) {
     cmdLine =
       "npx cloc" +
       " --quiet --progress-rate=0" +
       " Source/ --exclude-dir=Assets,ThirdParty,Workers --not-match-f=copyrightHeader.js";
 
-    child_process.exec(cmdLine, function (error, stdout, stderr) {
+    child_process.exec(cmdLine, function(error, stdout, stderr) {
       if (error) {
         console.log(stderr);
         return reject(error);
@@ -339,13 +340,13 @@ function cloc() {
   });
 
   //If running cloc on source succeeded, also run it on the tests.
-  return source.then(function () {
-    return new Promise(function (resolve, reject) {
+  return source.then(function() {
+    return new Promise(function(resolve, reject) {
       cmdLine =
         "npx cloc" +
         " --quiet --progress-rate=0" +
         " Specs/ --exclude-dir=Data";
-      child_process.exec(cmdLine, function (error, stdout, stderr) {
+      child_process.exec(cmdLine, function(error, stdout, stderr) {
         if (error) {
           console.log(stderr);
           return reject(error);
@@ -398,8 +399,8 @@ function generateDocumentation() {
 }
 gulp.task("generateDocumentation", generateDocumentation);
 
-gulp.task("generateDocumentation-watch", function () {
-  return generateDocumentation().done(function () {
+gulp.task("generateDocumentation-watch", function() {
+  return generateDocumentation().done(function() {
     console.log("Listening for changes in documentation...");
     return gulp.watch(sourceFiles, gulp.series("generateDocumentation"));
   });
@@ -418,7 +419,8 @@ gulp.task(
 
 gulp.task(
   "makeZipFile",
-  gulp.series("release", function () {
+  gulp.series("release", function() {
+
     //For now we regenerate the JS glsl to force it to be unminified in the release zip
     //See https://github.com/CesiumGS/cesium/pull/3106#discussion_r42793558 for discussion.
     glslToJavaScript(false, "Build/minifyShaders.state");
@@ -463,7 +465,8 @@ gulp.task(
 
     return mergeStream(builtSrc, staticSrc, indexSrc)
       .pipe(
-        gulpTap(function (file) {
+        gulpTap(function(file) {
+
           // Work around an issue with gulp-zip where archives generated on Windows do
           // not properly have their directory executable mode set.
           // see https://github.com/sindresorhus/gulp-zip/issues/64#issuecomment-205324031
@@ -479,7 +482,7 @@ gulp.task(
 
 gulp.task(
   "minify",
-  gulp.series("build", function () {
+  gulp.series("build", function() {
     return combineJavaScript({
       removePragmas: false,
       optimizer: "uglify2",
@@ -505,7 +508,7 @@ function isTravisPullRequest() {
   );
 }
 
-gulp.task("deploy-s3", function (done) {
+gulp.task("deploy-s3", function(done) {
   if (isTravisPullRequest()) {
     console.log("Skipping deployment for non-pull request.");
     done();
@@ -521,6 +524,7 @@ gulp.task("deploy-s3", function (done) {
   const cacheControl = argv.c ? argv.c : "max-age=3600";
 
   if (argv.confirm) {
+
     // skip prompt for travis
     deployCesium(bucketName, uploadDirectory, cacheControl, done);
     return;
@@ -536,7 +540,7 @@ gulp.task("deploy-s3", function (done) {
     "Files from your computer will be published to the " +
       bucketName +
       " bucket. Continue? [y/n] ",
-    function (answer) {
+    function(answer) {
       iface.close();
       if (answer === "y") {
         deployCesium(bucketName, uploadDirectory, cacheControl, done);
@@ -569,7 +573,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
 
   const prefix = uploadDirectory + "/";
   return listAll(s3, bucketName, prefix, existingBlobs)
-    .then(function () {
+    .then(function() {
       return globby(
         [
           "Apps/**",
@@ -592,10 +596,10 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
         }
       );
     })
-    .then(function (files) {
+    .then(function(files) {
       return Promise.map(
         files,
-        function (file) {
+        function(file) {
           const blobName = uploadDirectory + "/" + file;
           const mimeLookup = getMimeType(blobName);
           const contentType = mimeLookup.type;
@@ -606,7 +610,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
           totalFiles++;
 
           return readFile(file)
-            .then(function (content) {
+            .then(function(content) {
               if (!compress) {
                 return content;
               }
@@ -622,7 +626,8 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
 
               return gzip(content);
             })
-            .then(function (content) {
+            .then(function(content) {
+
               // compute hash and etag
               const hash = crypto
                 .createHash("md5")
@@ -645,7 +650,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
                   Key: blobName,
                 })
                 .promise()
-                .then(function (data) {
+                .then(function(data) {
                   if (
                     data.ETag !== '"' + hash + '"' ||
                     data.CacheControl !== cacheControl ||
@@ -659,11 +664,11 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
                   skipped++;
                   return undefined;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                   errors.push(error);
                 });
             })
-            .then(function (content) {
+            .then(function(content) {
               if (!content) {
                 return;
               }
@@ -684,10 +689,10 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
               return s3
                 .putObject(params)
                 .promise()
-                .then(function () {
+                .then(function() {
                   uploaded++;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                   errors.push(error);
                 });
             });
@@ -695,7 +700,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
         { concurrency: concurrencyLimit }
       );
     })
-    .then(function () {
+    .then(function() {
       console.log(
         "Skipped " +
           skipped +
@@ -710,7 +715,8 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
       }
 
       const objectsToDelete = [];
-      existingBlobs.forEach(function (file) {
+      existingBlobs.forEach(function(file) {
+
         //Don't delete generate zip files.
         if (!/\.(zip|tgz)$/.test(file)) {
           objectsToDelete.push({ Key: file });
@@ -729,7 +735,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
 
         return Promise.map(
           batches,
-          function (objects) {
+          function(objects) {
             return s3
               .deleteObjects({
                 Bucket: bucketName,
@@ -738,7 +744,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
                 },
               })
               .promise()
-              .then(function () {
+              .then(function() {
                 if (verbose) {
                   console.log("Cleaned " + objects.length + " files.");
                 }
@@ -748,17 +754,17 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
         );
       }
     })
-    .catch(function (error) {
+    .catch(function(error) {
       errors.push(error);
     })
-    .then(function () {
+    .then(function() {
       if (errors.length === 0) {
         done();
         return;
       }
 
       console.log("Errors: ");
-      errors.map(function (e) {
+      errors.map(function(e) {
         console.log(e);
       });
       done(1);
@@ -768,6 +774,7 @@ function deployCesium(bucketName, uploadDirectory, cacheControl, done) {
 function getMimeType(filename) {
   const mimeType = mime.getType(filename);
   if (mimeType) {
+
     //Compress everything except zipfiles, binary images, and video
     let compress = !/^(image\/|video\/|application\/zip|application\/gzip)/i.test(
       mimeType
@@ -812,22 +819,24 @@ function listAll(s3, bucketName, prefix, files, marker) {
       Marker: marker,
     })
     .promise()
-    .then(function (data) {
+    .then(function(data) {
       const items = data.Contents;
       for (let i = 0; i < items.length; i++) {
         files.push(items[i].Key);
       }
 
       if (data.IsTruncated) {
+
         // get next page of results
         return listAll(s3, bucketName, prefix, files, files[files.length - 1]);
       }
     });
 }
 
-gulp.task("deploy-set-version", function (done) {
+gulp.task("deploy-set-version", function(done) {
   const buildVersion = yargs.argv.buildVersion;
   if (buildVersion) {
+
     // NPM versions can only contain alphanumeric and hyphen characters
     packageJson.version += "-" + buildVersion.replace(/[^[0-9A-Za-z-]/g, "");
     fs.writeFileSync("package.json", JSON.stringify(packageJson, undefined, 2));
@@ -835,7 +844,7 @@ gulp.task("deploy-set-version", function (done) {
   done();
 });
 
-gulp.task("deploy-status", function () {
+gulp.task("deploy-status", function() {
   if (isTravisPullRequest()) {
     console.log("Skipping deployment status for non-pull request.");
     return Promise.resolve();
@@ -859,6 +868,7 @@ gulp.task("deploy-status", function () {
 });
 
 function setStatus(state, targetUrl, description, context) {
+
   // skip if the environment does not have the token
   if (!process.env.TOKEN) {
     return;
@@ -885,7 +895,7 @@ function setStatus(state, targetUrl, description, context) {
   });
 }
 
-gulp.task("coverage", function (done) {
+gulp.task("coverage", function(done) {
   const argv = yargs.argv;
   const webglStub = argv.webglStub ? argv.webglStub : false;
   const suppressPassed = argv.suppressPassed ? argv.suppressPassed : false;
@@ -922,7 +932,7 @@ gulp.task("coverage", function (done) {
       reporters: ["spec", "coverage"],
       coverageReporter: {
         dir: "Build/Coverage",
-        subdir: function (browserName) {
+        subdir: function(browserName) {
           folders.push(browserName);
           return browserName;
         },
@@ -933,9 +943,9 @@ gulp.task("coverage", function (done) {
         args: [undefined, undefined, undefined, webglStub, undefined],
       },
     },
-    function (e) {
+    function(e) {
       let html = "<!doctype html><html><body><ul>";
-      folders.forEach(function (folder) {
+      folders.forEach(function(folder) {
         html +=
           '<li><a href="' +
           encodeURIComponent(folder) +
@@ -947,7 +957,7 @@ gulp.task("coverage", function (done) {
       fs.writeFileSync("Build/Coverage/index.html", html);
 
       if (!process.env.TRAVIS) {
-        folders.forEach(function (dir) {
+        folders.forEach(function(dir) {
           open("Build/Coverage/" + dir + "/index.html");
         });
       }
@@ -957,7 +967,7 @@ gulp.task("coverage", function (done) {
   karma.start();
 });
 
-gulp.task("test", function (done) {
+gulp.task("test", function(done) {
   const argv = yargs.argv;
 
   const enableAllBrowsers = argv.all ? true : false;
@@ -1026,14 +1036,14 @@ gulp.task("test", function (done) {
         ],
       },
     },
-    function (e) {
+    function(e) {
       return done(failTaskOnError ? e : undefined);
     }
   );
   karma.start();
 });
 
-gulp.task("convertToModules", function () {
+gulp.task("convertToModules", function() {
   const requiresRegex = /([\s\S]*?(define|defineSuite|require)\((?:{[\s\S]*}, )?\[)([\S\s]*?)]([\s\S]*?function\s*)\(([\S\s]*?)\) {([\s\S]*)/;
   const noModulesRegex = /([\s\S]*?(define|defineSuite|require)\((?:{[\s\S]*}, )?\[?)([\S\s]*?)]?([\s\S]*?function\s*)\(([\S\s]*?)\) {([\s\S]*)/;
   const splitRegex = /,\s*/;
@@ -1043,8 +1053,8 @@ gulp.task("convertToModules", function () {
 
   const files = globby.sync(filesToConvertES6);
 
-  return Promise.map(files, function (file) {
-    return fsReadFile(file).then(function (contents) {
+  return Promise.map(files, function(file) {
+    return fsReadFile(file).then(function(contents) {
       contents = contents.toString();
       if (contents.startsWith("import")) {
         return;
@@ -1103,14 +1113,14 @@ gulp.task("convertToModules", function () {
 
       // Convert back to separate lists for the names and identifiers, and add
       // any additional names or identifiers that don't have a corresponding pair.
-      const sortedNames = requires.map(function (item) {
+      const sortedNames = requires.map(function(item) {
         return item.name.slice(0, -1) + ".js'";
       });
       for (let i = sortedNames.length; i < names.length; ++i) {
         sortedNames.push(names[i].trim());
       }
 
-      const sortedIdentifiers = requires.map(function (item) {
+      const sortedIdentifiers = requires.map(function(item) {
         return item.identifier;
       });
       for (let i = sortedIdentifiers.length; i < identifiers.length; ++i) {
@@ -1218,7 +1228,7 @@ function combineCesium(debug, optimizer, combineOutput) {
       plugins: plugins,
       onwarn: rollupWarning,
     })
-    .then(function (bundle) {
+    .then(function(bundle) {
       return bundle.write({
         format: "umd",
         name: "Cesium",
@@ -1230,28 +1240,30 @@ function combineCesium(debug, optimizer, combineOutput) {
 }
 
 function combineWorkers(debug, optimizer, combineOutput) {
+
   //This is done waterfall style for concurrency reasons.
   // Copy files that are already minified
   return globby(["Source/ThirdParty/Workers/draco*.js"])
-    .then(function (files) {
+    .then(function(files) {
       const stream = gulp
         .src(files, { base: "Source" })
         .pipe(gulp.dest(combineOutput));
       return streamToPromise(stream);
     })
-    .then(function () {
+    .then(function() {
       return globby([
         "Source/Workers/cesiumWorkerBootstrapper.js",
         "Source/Workers/transferTypedArrayTest.js",
         "Source/ThirdParty/Workers/*.js",
+
         // Files are already minified, don't optimize
         "!Source/ThirdParty/Workers/draco*.js",
       ]);
     })
-    .then(function (files) {
+    .then(function(files) {
       return Promise.map(
         files,
-        function (file) {
+        function(file) {
           return streamToPromise(
             gulp
               .src(file)
@@ -1268,10 +1280,10 @@ function combineWorkers(debug, optimizer, combineOutput) {
         { concurrency: concurrency }
       );
     })
-    .then(function () {
+    .then(function() {
       return globby(["Source/WorkersES6/*.js"]);
     })
-    .then(function (files) {
+    .then(function(files) {
       const plugins = [];
 
       if (!debug) {
@@ -1291,7 +1303,7 @@ function combineWorkers(debug, optimizer, combineOutput) {
           plugins: plugins,
           onwarn: rollupWarning,
         })
-        .then(function (bundle) {
+        .then(function(bundle) {
           return bundle.write({
             dir: path.join(combineOutput, "Workers"),
             format: "amd",
@@ -1333,7 +1345,7 @@ function combineJavaScript(options) {
     minifyModules(outputDirectory)
   );
 
-  return promise.then(function () {
+  return promise.then(function() {
     const promises = [];
 
     //copy to build folder with copyright header added at the top
@@ -1354,7 +1366,7 @@ function combineJavaScript(options) {
       .pipe(gulp.dest(outputDirectory));
     promises.push(streamToPromise(stream));
 
-    return Promise.all(promises).then(function () {
+    return Promise.all(promises).then(function() {
       rimraf.sync(combineOutput);
     });
   });
@@ -1372,7 +1384,7 @@ function glslToJavaScript(minify, minifyStateFilePath) {
 
   globby
     .sync(["Source/Shaders/**/*.js", "Source/ThirdParty/Shaders/*.js"])
-    .forEach(function (file) {
+    .forEach(function(file) {
       leftOverJsFiles[path.normalize(file)] = true;
     });
 
@@ -1384,7 +1396,7 @@ function glslToJavaScript(minify, minifyStateFilePath) {
     "Source/Shaders/**/*.glsl",
     "Source/ThirdParty/Shaders/*.glsl",
   ]);
-  glslFiles.forEach(function (glslFile) {
+  glslFiles.forEach(function(glslFile) {
     glslFile = path.normalize(glslFile);
     const baseName = path.basename(glslFile, ".glsl");
     const jsFile = path.join(path.dirname(glslFile), baseName) + ".js";
@@ -1454,11 +1466,11 @@ export default "' +
   });
 
   // delete any left over JS files from old shaders
-  Object.keys(leftOverJsFiles).forEach(function (filepath) {
+  Object.keys(leftOverJsFiles).forEach(function(filepath) {
     rimraf.sync(filepath);
   });
 
-  const generateBuiltinContents = function (contents, builtins, path) {
+  const generateBuiltinContents = function(contents, builtins, path) {
     for (let i = 0; i < builtins.length; i++) {
       const builtin = builtins[i];
       contents.imports.push(
@@ -1492,7 +1504,7 @@ export default "' +
 
 function createCesiumJs() {
   let contents = `export var VERSION = '${version}';\n`;
-  globby.sync(sourceFiles).forEach(function (file) {
+  globby.sync(sourceFiles).forEach(function(file) {
     file = path.relative("Source", file);
 
     let moduleId = file;
@@ -1516,6 +1528,7 @@ function createCesiumJs() {
 }
 
 function createTypeScriptDefinitions() {
+
   // Run jsdoc with tsd-jsdoc to generate an initial Cesium.d.ts file.
   child_process.execSync("npx jsdoc --configure Tools/jsdoc/ts-conf.json", {
     stdio: "inherit",
@@ -1628,7 +1641,7 @@ ${source}
 
   // Map individual modules back to their source file so that TS still works
   // when importing individual files instead of the entire cesium module.
-  globby.sync(sourceFiles).forEach(function (file) {
+  globby.sync(sourceFiles).forEach(function(file) {
     file = path.relative("Source", file);
 
     let moduleId = file;
@@ -1673,7 +1686,7 @@ function createSpecList() {
   const specFiles = globby.sync(["Specs/**/*Spec.js"]);
 
   let contents = "";
-  specFiles.forEach(function (file) {
+  specFiles.forEach(function(file) {
     contents +=
       "import './" + filePathToModuleId(file).replace("Specs/", "") + ".js';\n";
   });
@@ -1713,11 +1726,12 @@ function createGalleryList() {
       .trim()
       .split("\n");
   } catch (e) {
+
     // On a Cesium fork, tags don't exist so we can't generate the list.
   }
 
   let helloWorld;
-  globby.sync(fileList).forEach(function (file) {
+  globby.sync(fileList).forEach(function(file) {
     const demo = filePathToModuleId(
       path.relative("Apps/Sandcastle/gallery", file)
     );
@@ -1738,7 +1752,7 @@ function createGalleryList() {
     }
   });
 
-  demoObjects.sort(function (a, b) {
+  demoObjects.sort(function(a, b) {
     if (a.name < b.name) {
       return -1;
     } else if (a.name > b.name) {
@@ -1820,6 +1834,7 @@ function buildSandcastle() {
       "!Apps/Sandcastle/images/**",
       "!Apps/Sandcastle/gallery/**.jpg",
     ])
+
     // Remove dev-only ES6 module loading for unbuilt Cesium
     .pipe(
       gulpReplace(
@@ -1828,6 +1843,7 @@ function buildSandcastle() {
       )
     )
     .pipe(gulpReplace("nomodule", ""))
+
     // Fix relative paths for new location
     .pipe(gulpReplace("../../../Build", "../../.."))
     .pipe(gulpReplace("../../Source", "../../../Source"))
@@ -1877,7 +1893,7 @@ function buildCesiumViewer() {
         ],
         onwarn: rollupWarning,
       })
-      .then(function (bundle) {
+      .then(function(bundle) {
         return bundle.write({
           file: "Build/Apps/CesiumViewer/CesiumViewer.js",
           format: "iife",
@@ -1885,7 +1901,7 @@ function buildCesiumViewer() {
       })
   );
 
-  promise = promise.then(function () {
+  promise = promise.then(function() {
     const stream = mergeStream(
       gulp
         .src("Build/Apps/CesiumViewer/CesiumViewer.js")

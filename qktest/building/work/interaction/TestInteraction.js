@@ -1,7 +1,8 @@
-import { RenderSimple } from '../../../../src/cesiumplugin/core/primitives/renderGeom/RenderSimple.js'
-import { CameraPro } from '../../../../src/cesiumplugin/core/control/camera/CameraPro.js'
-
+// import { RenderSimple } from '../../../../src/cesiumplugin/core/primitives/renderGeom/RenderSimple.js'
+// import { CameraPro } from '../../../../src/cesiumplugin/core/control/camera/CameraPro.js'
+import { CameraPro, RenderSimple} from "../../../../src/cesiumplugin.js";
 class TestInteraction {
+
   /**
    * 交互
    * @param {*} viewer
@@ -21,6 +22,7 @@ class TestInteraction {
   // }
 
   flyto() {
+
     // https://zhuanlan.zhihu.com/p/66434400
     // 控制参考
     // let param = {
@@ -52,6 +54,7 @@ class TestInteraction {
 
       z: 4275754.210693352,
     }
+
     // let param = {
     //   y: 39.092423,
     //   x: 121.990975,
@@ -61,6 +64,7 @@ class TestInteraction {
     //   roll: 0,
     // }
     CameraPro.cameraSetViewGraphic(param, this.viewer)
+
     // -2602091.939508,4231233.399473,3987398.060792
     // 大连
     // param = {
@@ -80,6 +84,7 @@ class TestInteraction {
       this.newPrimitive.add(newPointPrimitive)
       let paramFull = {
         camera: {},
+
         // clickReal: { title: '点选实际位置（需要深度检测）' },
         // clickGloble: { title: '点选地形位置？' },
         // clickTest: { title: '当前视角点选地表位置？' },
@@ -94,6 +99,7 @@ class TestInteraction {
       )
       paramFull.camera.pitch = Cesium.Math.toDegrees(this.viewer.camera.pitch)
       paramFull.camera.roll = Cesium.Math.toDegrees(this.viewer.camera.roll)
+
       // Cesium.Math.toRadians
 
       // 点击
@@ -158,6 +164,7 @@ class TestInteraction {
         testa,
       ]) //屏蔽业务数据 集合无效？？？
       promise0.then((updatedCartesians) => {
+
         // entities[0].position = updatedCartesians[0];
         // entities[1].position = updatedCartesians[1];
         RenderSimple.simplePointByPrimitives(
@@ -211,9 +218,10 @@ class TestInteraction {
 
     // 图块右键信息   变色
     this.handler.setInputAction((click) => {
-      var feature = this.viewer.scene.pick(click.position)
+      let feature = this.viewer.scene.pick(click.position)
       if (feature instanceof Cesium.Cesium3DTileFeature) {
         feature.color = Cesium.Color.fromCssColorString('#68c3ff')
+
         // var propertyNames = feature.getPropertyNames();
         // var length = propertyNames.length;
         // for (var i = 0; i < length; ++i) {
@@ -236,6 +244,7 @@ class TestInteraction {
    */
   destroy() {
     this.handler = this.handler && this.handler.destroy()
+
     // this.viewer.scene.primitives.remove(this.newPrimitive)
     this.newPrimitive.removeAll()
   }
@@ -244,6 +253,7 @@ class TestInteraction {
    * 抗锯齿
    */
   fxaa() {
+
     //是否开启抗锯齿
     viewer.scene.fxaa = true
     viewer.scene.postProcessStages.fxaa.enabled = true
@@ -262,14 +272,17 @@ function transPosition(Position, pickResult) {
     pickResult.x = Position.x
     pickResult.y = Position.y
     pickResult.z = Position.z
+
     // let cameraCatographic = Cesium.Cartographic.fromCartesian(cameraPosition)//其他坐标系 默认Cesium.Ellipsoid.WGS84.cartesianToCartographic
     let positionRadiansArray =
       Cesium.Ellipsoid.WGS84.cartesianToCartographic(Position)
+
     // { longitude: -1.2401877595579294, latitude: 0.7390897322079129, height: -23.82495725068516 }
     pickResult.lon = Cesium.Math.toDegrees(positionRadiansArray.longitude)
     pickResult.lat = Cesium.Math.toDegrees(positionRadiansArray.latitude)
     pickResult.h = positionRadiansArray.height
   } else {
+
     // pickResult = null
   }
 }
@@ -277,6 +290,7 @@ function transPosition(Position, pickResult) {
 function showInfo(paramFull) {
   paramFull.jsonString = JSON.stringify(paramFull)
   localforage.setItem('场景参数' + new Date(), paramFull).then(() => {
+
     // markDistrict++
     // (districtGeojsonArray.length == markDistrict) && localforage.setItem('markDistrict', markDistrict)
     console.log(paramFull)

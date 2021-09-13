@@ -1,4 +1,5 @@
 class BaseLayers {
+
   /**
    * 基础图层添加管理
    * 原始函数！
@@ -18,9 +19,8 @@ class BaseLayers {
    * @returns 
    */
   addLayer(name, type, index, config) {
-    let provider;
+    let provider, key;
     switch (type) {
-
 
     case "tms": //tms
       provider = new Cesium.createTileMapServiceImageryProvider({
@@ -53,6 +53,7 @@ class BaseLayers {
         'EPSG:4326:20',
         'EPSG:4326:21',
       ]
+
       //1.新建ImageryProvider
       let provider = new Cesium.WebMapTileServiceImageryProvider({
         url: config.url,
@@ -72,9 +73,10 @@ class BaseLayers {
         url: 'https://a.tile.openstreetmap.org/'
       })
       break;
+
       //天地图影像
     case "tdt_img":
-      let key = config.key || '8a7a551905711535885142a660a10111'
+      key = config.key || '8a7a551905711535885142a660a10111'
       provider = new Cesium.WebMapTileServiceImageryProvider({
         url: "http://{s}.tianditu.gov.cn/img_c/wmts?service=wmts&request=GetTile&version=1.0.0" +
           "&LAYER=img&tileMatrixSet=c&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}" +
@@ -90,9 +92,10 @@ class BaseLayers {
         show: false
       })
       break;
+
       //天地图标注
     case "tdt_lb":
-      let key = config.key || '8a7a551905711535885142a660a10111'
+      key = config.key || '8a7a551905711535885142a660a10111'
       provider = new Cesium.WebMapTileServiceImageryProvider({
         url: "http://{s}.tianditu.gov.cn/cia_c/wmts?service=wmts&request=GetTile&version=1.0.0" +
           "&LAYER=cia&tileMatrixSet=c&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}" +
