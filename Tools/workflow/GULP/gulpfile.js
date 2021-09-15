@@ -56,10 +56,16 @@ let createEachPGJs = async(cb) => {
 
 const inputOptions = { // 核心参数
   input: coreBasePath + name + '.js', // 唯一必填参数 
-  plugins: [terser()],
+  plugins: [terser()], //压缩代码
 
   //  external, 
 };
+
+/**
+ * esm – 将软件包保存为 ES 模块文件，在现代浏览器中可以通过 <script type=module> 标签引入
+ * iife – 一个自动执行的功能，适合作为<script>标签。（如果要为应用程序创建一个捆绑包，您可能想要使用它，因为它会使文件大小变小。）
+ * 
+ */
 const outputOptions = { // 核心参数
   format: 'esm', // 必填
   file: 'dist/' + name + '.mjs', //输出到指定的文件夹// 若有bundle.write，必填
@@ -67,16 +73,25 @@ const outputOptions = { // 核心参数
 
   //  name, //  globals,
 };
+
+const outputOptionsOld = { // 核心参数
+  format: 'iife', // 必填
+  file: 'dist/' + name + '.js', //输出到指定的文件夹// 若有bundle.write，必填
+  name: name, //iife必须提供
+
+  //  globals,
+};
 let rollupES6 = async() => {
   const bundle = await rollup(inputOptions) // const bundle = await rollup.rollup(inputOptions);
   // console.log(bundle.imports); // an array of external dependencies
   // console.log(bundle.exports); // an array of names exported by the entry point
   // console.log(bundle.modules); // an array of module objects
   // generate code and a sourcemap
-  const { code, map } = await bundle.generate(outputOptions);
+  // const { code, map } = await bundle.generate(outputOptions);
 
   // or write the bundle to disk
   await bundle.write(outputOptions);
+  await bundle.write(outputOptionsOld);
 }
 
 // 斜杠替换 \to/
