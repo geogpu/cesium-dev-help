@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import { HoleDraw } from "../../../../src/cesiumplugin/core/draw/mouse/HoleDraw.js";
 // import { ClippingPlanesByGeom } from "../../../../src/cesiumplugin/core/primitives/clipPlanes/ClippingPlanesByGeom.js";
 import { ClippingPlanesByGeom } from "../../../../src/cesiumplugin.js";
@@ -37,8 +38,13 @@ class ConstControl {
       console.log('arr:', arr); // arr: [1, 2, 3]
     };
 
-    var arr = [1, 2, 3];
+    let arr = [1, 2, 3];
     myWorker.postMessage(arr);
+  }
+
+  static useUniversal3DSceneInterface(viewer){
+    console.log('useUniversal3DSceneInterface')
+
   }
 }
 

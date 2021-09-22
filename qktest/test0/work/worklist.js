@@ -2,18 +2,17 @@ import { initSimple } from "./viwerWork/initSimple.js";
 import { TestDataAdd } from "./dataAdd/TestDataAdd.js";
 import { TestInteraction } from "./interaction/TestInteraction.js";
 
-
 import { MouseListen } from "../../cesiumEx/AppUtils/control/mouse/MouseListen.js";
 import { BaseDraw } from "../../cesiumEx/AppUtils/draw/mouse/BaseDraw.js";
 import { HoleDraw } from "../../cesiumEx/AppUtils/draw/mouse/HoleDraw.js";
 import { ConstControl } from "./draw/ConstControl.js";
 
-
-
 function workList() {
+
   // 初始化viewer
   initSimple()
   let viewer = window.viewer
+
   //是否开启抗锯齿
   viewer.scene.fxaa = true;
   viewer.scene.postProcessStages.fxaa.enabled = true;
@@ -25,6 +24,7 @@ function workList() {
     let mouseListen = new MouseListen(viewer)
     let baseDraw = new BaseDraw(viewer)
     let holeDraw = new HoleDraw(viewer)
+
     // var line = undefined; //全局线对象
     // var linearr = []; //线的坐标存储
     // //鼠标点击事件监听
@@ -64,16 +64,18 @@ function workList() {
     //   }
     // }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
-
     let testConfig = [
+
       // 控制
       { title: '控制', class: 'leftWorkListTitle' },
+
       // { name: '相机控制', func: () => { testInteraction.getCamera() }, class: 'leftWorkListButton' },
       { name: 'flyto', func: () => { testInteraction.flyto() }, class: 'leftWorkListButton' },
       { name: '场景参数', func: () => { testInteraction.getClick() }, class: 'leftWorkListButton' },
       { name: '清空', func: () => { testInteraction.destroy() }, class: 'leftWorkListButton' },
       { name: '深度检测', func: () => { testInteraction.destroy() }, class: 'leftWorkListButton' },
       { name: '抗锯齿', func: () => { testInteraction.destroy() }, class: 'leftWorkListButton' },
+
       // 添加数据
 
       { title: '添加数据', class: 'leftWorkListTitle' },
@@ -82,6 +84,7 @@ function workList() {
       { name: '地形', func: () => { testDataAdd.addTestTerrain() }, class: 'leftWorkListButton' },
       { name: 'glb', func: () => { testDataAdd.addTestGlb() }, class: 'leftWorkListButton' },
       { name: 'entity', func: () => { testDataAdd.addTestEntity() }, class: 'leftWorkListButton' },
+
       // 绘制
       { title: '鼠标', class: 'leftWorkListTitle' },
       { name: '测试监听', func: () => { mouseListen.drawListen() }, class: 'leftWorkListButton' },
@@ -93,6 +96,7 @@ function workList() {
       { name: '贴地面', func: () => { baseDraw.drawGroundPolygonStart() }, class: 'leftWorkListButton' },
       { name: '清空监听', func: () => { baseDraw.removeAll() }, class: 'leftWorkListButton' },
       { name: '保留', func: () => { baseDraw.storeEntitiesStart() }, class: 'leftWorkListButton' },
+
       // 挖坑
       { title: '挖坑', class: 'leftWorkListTitle' },
       { name: '启动监听', func: () => { holeDraw.drawListen() }, class: 'leftWorkListButton' },
@@ -100,6 +104,7 @@ function workList() {
       { name: '3dtiles开挖', func: () => { holeDraw.hole3DtilesDrawStart() }, class: 'leftWorkListButton' },
       { name: 'glb开挖', func: () => { console.log(this) }, class: 'leftWorkListButton' },
       { name: '清空监听', func: () => { holeDraw.removeAll() }, class: 'leftWorkListButton' },
+
       // 固定值
       { title: '固定值', class: 'leftWorkListTitle' },
       { name: '固定值挖坑', func: () => { ConstControl.drawHole(viewer) }, class: 'leftWorkListButton' },
@@ -109,11 +114,9 @@ function workList() {
 
   }
 
-
 }
 
 export { workList };
-
 
 // 添加简单测试按钮
 function addTest(testConfig, jqString) {
@@ -127,7 +130,6 @@ function addTest(testConfig, jqString) {
       inHtml += ('<button id = "' + element.name + i + '" class="' + element.class + '">' + element.name + '</button>')
     }
 
-
   }
   $(jqString).append(inHtml)
   for (let i = 0; i < testConfig.length; i++) {
@@ -137,14 +139,6 @@ function addTest(testConfig, jqString) {
     }
   }
 }
-
-
-
-
-
-
-
-
 
 // 按键 键值表
 // https://www.jb51.net/article/173741.htm
