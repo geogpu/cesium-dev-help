@@ -99,8 +99,9 @@ function filePathToModuleId(moduleId) {
   return moduleId.substring(0, moduleId.lastIndexOf(".")).replace(/\\/g, "/");
 }
 
+// gulp生效测试
 let GULP_CONNECT = gulpConnect;
-let GULP_PACKAGE = createEachPGJs;
-let GULP_BUILD = series(createEachPGJs, rollupES6);
+let GULP_PACKAGE = createEachPGJs;//生成文件头
+let GULP_BUILD = series(createEachPGJs, rollupES6);//生成文件头并打包 mjs js
 
 export { GULP_CONNECT, GULP_PACKAGE, GULP_BUILD }
