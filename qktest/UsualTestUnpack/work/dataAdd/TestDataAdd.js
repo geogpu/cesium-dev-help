@@ -1528,6 +1528,7 @@ class TestDataAdd {
 
   }
   addTestEntity2() {
+    debugger
     let viewer = this.viewer
     let myEntityCollection = new Cesium.CustomDataSource('testEntityCollection')
     this.viewer.dataSources.add(myEntityCollection)
@@ -2053,6 +2054,66 @@ class TestDataAdd {
 
   blueBox.position = property;
 
+  }
+
+  addplygon(){
+    debugger
+
+    let geoJsonObj = {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+              [
+                  [106.10595703125, 33.33970700424026],
+                  [106.32568359375, 32.41706632846282],
+                  [108.03955078125, 32.2313896627376],
+                  [108.25927734375, 33.15594830078649],
+                  [106.10595703125, 33.33970700424026]
+              ]
+          ]
+      }
+  };
+
+  let smcPromise = Cesium.GeoJsonDataSource.load(geoJsonObj,
+      {
+          clampToGround: true
+      }
+  );
+
+  smcPromise.then(function(dataSource) {
+      this.viewer.dataSources.add(dataSource);
+      this.viewer.flyTo(dataSource);
+      let entities = dataSource.entities.values;
+      debugger
+      for (let i = 0; i < entities.length; i++) {
+          let entity = entities[i];
+          entity.polygon.material = Cesium.Color.RED.withAlpha(0.8)
+      }
+
+      let param = {
+        h: 1567.9855743901433,
+        heading: 21.98044650951645,
+  
+        lat: 33.33970700424026,
+  
+        lon: 106.10595703125,
+  
+        pitch: -77.75571355232125,
+  
+        roll: 0.34294193787960303,
+  
+        // x: 1532606.6091789035,
+  
+        // y: -4466150.142919737,
+  
+        // z: 4275754.210693352,
+      }
+  
+      CameraPro.cameraSetViewGraphic(param, this.viewer)
+
+  })
   }
 }
 export { TestDataAdd }

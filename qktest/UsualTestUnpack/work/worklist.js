@@ -45,7 +45,8 @@ function workList() {
       { name: 'entity0横向分层', func: () => { testDataAdd.addTestEntity0() }, class: 'leftWorkListButton' },
       { name: 'entity1单层位移', func: () => { testDataAdd.addTestEntity1() }, class: 'leftWorkListButton' },
       { name: 'entity2', func: () => { testDataAdd.addTestEntity2() }, class: 'leftWorkListButton' },
-      
+      { name: '添加geojson对象', func: () => { testDataAdd.addplygon() }, class: 'leftWorkListButton' },
+
       // 绘制
       { title: '鼠标', class: 'leftWorkListTitle' },
       { name: '测试监听', func: () => { mouseListen.drawListen() }, class: 'leftWorkListButton' },
@@ -76,6 +77,7 @@ function workList() {
       { name: '视角监测', func: () => { ConstControl.useUniversal3DSceneInterface(viewer) }, class: 'leftWorkListButton' },
       { name: '视角锥体', func: () => { ConstControl.webwork(viewer) }, class: 'leftWorkListButton' },
       { name: '动态替换', func: () => { ConstControl.webwork(viewer) }, class: 'leftWorkListButton' },
+
     ]
     addTest(testConfig, '.leftWorkListBox')
 
