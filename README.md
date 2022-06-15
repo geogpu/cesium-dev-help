@@ -3,9 +3,9 @@ cesium开发辅助封装
 
 ## 打包流程 Packaging process
 ```sh
-# 打包
+# 打包 packaging
 gulp GULP_BUILD
-# 声明
+# 声明 create .d.ts
 tsc --build tsconfig.json
 
 ```
