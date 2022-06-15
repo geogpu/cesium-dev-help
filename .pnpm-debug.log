@@ -1,0 +1,20 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 error pnpm": {
+    "errno": 1,
+    "code": "ELIFECYCLE",
+    "pkgid": "cesium-dev-help@0.0.2",
+    "stage": "pnpm_outdated",
+    "script": "pnpm outdated",
+    "pkgname": "cesium-dev-help",
+    "err": {
+      "name": "pnpm",
+      "message": "cesium-dev-help@0.0.2 pnpm_outdated: `pnpm outdated`\nExit status 1",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: cesium-dev-help@0.0.2 pnpm_outdated: `pnpm outdated`\nExit status 1\n    at EventEmitter.<anonymous> (C:\\Users\\Administrator\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:105664:20)\n    at EventEmitter.emit (node:events:527:28)\n    at ChildProcess.<anonymous> (C:\\Users\\Administrator\\AppData\\Roaming\\npm\\node_modules\\pnpm\\dist\\pnpm.cjs:92211:18)\n    at ChildProcess.emit (node:events:527:28)\n    at maybeClose (node:internal/child_process:1092:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:302:5)"
+    }
+  },
+  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
+}

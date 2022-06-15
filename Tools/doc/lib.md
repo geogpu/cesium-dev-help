@@ -1,20 +1,9 @@
-<!-- TODO  转移 -->
-
-```
-Rollup 的存在并不是为了取代 webpack,仅仅是弥补 webpack 的一些不足,webpack 和 rollup 各有各的应用场景,
-
-rollup 专注以 ESModule 打包/自动 treeshaking,更准确的来说 rollup 是小而美的打包工具
-```
-
 ## 快速上手
-
+使用esbuild快速打包、gulp编排流程、tsc创建声明文件
 ```js
 //项目初始化并且安装依赖
-
- yarn init -y
-
-//  yarn add rollup --dev
-npm install rollup --save-dev
+pnpm init -y
+pnpm install esbuild --save-dev
 
 //项目文件 index.js
 
@@ -45,17 +34,10 @@ export default {
   hi: 'test rollup'
 }
 
-运行打包命令:
-
-yarn rollup ./src/index.js  --format iife --file dist/bundle.js
-
-//打包命令解读 yarn rollup 指定运行 rollup
-
-//./src/index.js 指定入口文件
-
-//format iife 指定文件格式 iife指的是自执行函数
-
-//--file dist/bundle.js 指定输出文件路径以及文件名
+// 运行打包命令:
+esbuild index.js --bundle --format=esm --minify --sourcemap --outfile=out4.js
+// esbuild文档
+// https://esbuild.github.io/api/#define
 ```
 
 ## 配置文件
@@ -278,7 +260,7 @@ export default {
 
 ```bash
 # 安装
-npm install gulp --save-dev
+pnpm install gulp --save-dev
 # 执行
 gulp wx-test
 
@@ -302,4 +284,23 @@ Promise 接口
 ```bash
 # 安装
 npm install globby --save-dev
+```
+
+> eslint --init
+> pnpm install @typescript-eslint/eslint-plugin@latest, @typescript-eslint/parser@latest --save-dev
+
+
+```
+这是因为之前npm使用了淘宝镜像，淘宝镜像只支持下载，不支持上传发布，需要将配置的registry重新指向npm官方registryhttps://registry.npmjs.org/：
+
+npm config set registry https://registry.npmjs.org/
+1
+登录成功：
+
+Logged in as qianmian on https://registry.npmjs.org/.
+1
+但是npm官方下载包很慢，再切换到淘宝镜像：
+
+npm config set registry https://registry.npm.taobao.org 
+
 ```

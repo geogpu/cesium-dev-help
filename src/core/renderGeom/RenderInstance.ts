@@ -1,17 +1,19 @@
+import { Cesium } from '../outsource/LibManager';
 class RenderInstance {
+  viewer: Cesium.Viewer;
   constructor(viewer) {
     this.viewer = viewer;
   }
 
   /**
    * 添加单模型
-   * @param {*} url 
-   * @param {*} modelMatrix 
+   * @param {*} url
+   * @param {*} modelMatrix
    * @param {*} primitiveModelCollection  要添加的渲染集合
-   * @param {*} modelPosition 混合样式 动画设置 
+   * @param {*} modelPosition 混合样式 动画设置
    */
   PolylineVolumeGeometryInstance(id, polylinePositions, PrimitiveCollection, shapePositions) {
-    let polylinevolumeinstance = new Cesium.GeometryInstance({
+    const polylinevolumeinstance = new Cesium.GeometryInstance({
       geometry: new Cesium.PolylineVolumeGeometry({
         vertexFormat: Cesium.MaterialAppearance.MaterialSupport.BASIC.vertexFormat,
         polylinePositions: polylinePositions,
@@ -45,6 +47,6 @@ class RenderInstance {
 }
 
 export {
-  
+
   RenderInstance
 }

@@ -1,33 +1,34 @@
+import { Cesium } from '../outsource/LibManager';
 class WorldPositionTransform {
-  constructor() {
 
-  }
+  // constructor() {
+
+  // }
 
   /**
    * 经纬度高程修改positions
-   * @param {*} positions 
-   * @param {*} heightAdd  m高度改正 
+   * @param {Array} positions
+   * @param {*} heightAdd  m高度改正
    * @param {*} lonRadiansAdd 弧度！！！
    * @param {*} latRadiansAdd 弧度
    */
   static PositionByCartographicChange(positions, heightAdd, lonRadiansAdd, latRadiansAdd) {
     let positionResult
-    for (let i = 0; i < positions.length; i++) {
-      let cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(positions[i])
-      heightAdd && (cartographic.height += heightAdd)
-      lonRadiansAdd && (cartographic.lon += lonRadiansAdd)
-      latRadiansAdd && (cartographic.lat += latRadiansAdd)
-
-      positionResult[i] = Cesium.Cartesian3.fromRadians(cartographic)
+    for (let i = 0; i < positions.length; i += 1) {
+      const cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(positions[i])
+      if(heightAdd)cartographic.height += heightAdd
+      if(lonRadiansAdd)cartographic.longitude += lonRadiansAdd
+      if(latRadiansAdd)cartographic.latitude += latRadiansAdd
+      positionResult[i] = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, cartographic.height)
     }
     return positionResult
   }
 
   /**
    * 获取完整位置信息
-   * @param {*} coordinate 
-   * @param {*} type 
-   * @param {*} result 
+   * @param {*} coordinate
+   * @param {*} type
+   * @param {*} result
    */
   static getPositionAndCartographic(coordinate, type, result) {
     let position
@@ -40,8 +41,6 @@ class WorldPositionTransform {
     case 'cartographicDegrees':
       cartographicRadians = coordinate
       position = Cesium.Cartesian3.fromDegrees(coordinate.longitude, coordinate.latitude, coordinate.height)
-
-      // Cesium.Cartographic.fromDegrees
       break;
     case 'cartographicRadians':
       cartographicDegrees = coordinate
@@ -61,6 +60,8 @@ class WorldPositionTransform {
       latitude: Cesium.Math.toDegrees(cartographicRadians.latitude),
       height: cartographicRadians.height
     }
+
+    return result
 
   }
 }

@@ -1,29 +1,42 @@
 {
-  "name": "cesiumplugin",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "cesium-dev-help",
+  "version": "0.0.3",
+  "main": "dist/cesium-dev-help.js",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geogpu/cesium-dev-help.git"
+  },
+  "keywords": [
+    "js",
+    "cesium"
+  ],
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "yarn rollup ./src/index.js  --format iife --file dist/bundle.js",
-    "build-configTemplate": "yarn rollup --c rollup.configTemplate0.js yarn rollup --c rollup.configTemplate1.js",
-    "build-configTemplate0": "yarn rollup --c Tools/package/rollup.configTemplate0.js",
-    "build-configTemplate1": "yarn rollup --c Tools/package/rollup.configTemplate1.js",
-    "test-js0": "node DividePolygonsIntoTriangles.js",
-    "test-js1": "node DividePolygonsIntoTriangles.js",
-    "flow_v": "node Tools/workflow/qkflow.js version",
+    "GULP_BUILD": "gulp GULP_BUILD",
+    "tsc_build": "tsc --build tsconfig.json",
     "GULP_LIST": "gulp --tasks",
     "GULP_CONNECT": "gulp GULP_CONNECT",
     "GULP_PACKAGE": "gulp GULP_PACKAGE",
-    "GULP_BUILD": "gulp GULP_BUILD",
-    "start": "node excelDeal.js"
+    "install_all": "pnpm install",
+    "npm_publish": "npm publish",
+    "pnpm_outdated": "pnpm outdated",
+    "pnpm_update": "pnpm update",
+    "custom_qkflow": "node Tools/workflow/qkflow.js version"
   },
   "devDependencies": {
+    "@types/node": "^17.0.43",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
+    "cesium": "^1.94.3",
+    "esbuild": "^0.14.43",
     "eslint": "^7.32.0",
-    "globby": "^12.0.2",
+    "globby": "^12.2.0",
     "gulp": "^4.0.2",
-    "mocha": "^9.1.1",
-    "rollup": "^2.56.1",
-    "rollup-plugin-terser": "^7.0.2"
+    "mocha": "^9.2.2",
+    "typescript": "^4.7.3"
   }
 }

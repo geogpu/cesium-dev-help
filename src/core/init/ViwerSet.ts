@@ -1,7 +1,10 @@
+import { Cesium } from '../outsource/LibManager';
+
 /**
  * 管线类viewer初始设置
- * @param {*} viewer 
+ * @param {*} viewer
  */
+
 function ViwerSet(viewer) {
 
   // 禁用默认的实体双击动作。
@@ -13,13 +16,13 @@ function ViwerSet(viewer) {
   );
 
   //移动设备上禁掉以下几个选项，可以相对更加流畅
-  if (!haoutil.system.isPCBroswer()) {
-    viewer.targetFrameRate = 20; //限制帧率
-    viewer.requestRenderMode = true; //取消实时渲染
-    viewer.scene.fog.enable = false;
-    viewer.scene.skyAtmosphere.show = false;
-    viewer.scene.fxaa = false;
-  }
+  // if (!haoutil.system.isPCBroswer()) {
+  //   viewer.targetFrameRate = 20; //限制帧率
+  //   viewer.requestRenderMode = true; //取消实时渲染
+  //   viewer.scene.fog.enable = false;
+  //   viewer.scene.skyAtmosphere.show = false;
+  //   viewer.scene.fxaa = false;
+  // }
 
   //IE浏览器优化
   if (window.navigator.userAgent.toLowerCase().indexOf("msie") >= 0) {
@@ -43,7 +46,8 @@ function ViwerSet(viewer) {
   if (viewer.sceneModePicker) viewer.sceneModePicker.viewModel.duration = 0.0;
 
   //抗锯齿
-  let supportsImageRenderingPixelated = viewer.cesiumWidget._supportsImageRenderingPixelated;
+  // eslint-disable-next-line no-underscore-dangle
+  const supportsImageRenderingPixelated = viewer.cesiumWidget._supportsImageRenderingPixelated;
   if (supportsImageRenderingPixelated) {
 
     // 直接拿到设备的像素比例因子 - 如我设置的1.25

@@ -1,14 +1,35 @@
+import { Cesium } from '../outsource/LibManager';
+
 /**
  * 通用三维场景接口（变种octree结合geohash场景树）
- * 
+ *
  * 1、子节点内传递函数和数据更新场景
- * 
+ *
  * 2、数据规范化为点
- * 
+ *
  * 3、不同三维级别需要参数、数据分层抽稀（附带通用数据库脚本）
- * 
+ *
  */
 class Universal3DSceneInterface {
+  viewer: any;
+  camera: any;
+  tilesCountAdd: any;
+  tilesCount: number;
+  tilesSize: number;
+  requestHeight: any;
+  renderArrayHeight: any;
+  levZ: any;
+  dlat: number;
+  dlon: number;
+  row: number;
+  col: number;
+  tilesIdArraysOld: any[];
+  tilesMapWillAdd: Map<any, any>;
+  tilesSetWillDelete: Set<unknown>;
+  tilesMapRenderNow: Map<any, any>;
+  cesiumParams: { viewer: any; camera: any; endRender: boolean; };
+  featureFunction: any;
+  removeChanged: any;
 
   /**
    * 分割与取图块分离!!!  切割坐标与OSM一致 经纬度计算（弧度）
@@ -27,7 +48,7 @@ class Universal3DSceneInterface {
    * @param {Number} tilesCountAdd 请求瓦片一侧添加行列数0 1 2
    * @param {Number} requestHeight 开始加载和判定高度
    * @param {Array} renderArrayHeight 渲染距离范围 [最小,最大]
-   * @param {*} startDlat 不确定levZ通过单个瓦块内最大纬度差来确定级别   弧度  
+   * @param {*} startDlat 不确定levZ通过单个瓦块内最大纬度差来确定级别   弧度
    */
   setParams(levZ, tilesCountAdd, requestHeight, renderArrayHeight, startDlat) {
     this.tilesCountAdd = tilesCountAdd;
@@ -77,7 +98,7 @@ class Universal3DSceneInterface {
 
     //监听  移动结束（防止移动加载卡顿）this.removeEnd = this.camera.moveEnd.addEventListener
     //监听  比率变化（平滑大数据量卡顿）this.removeChanged = this.camera.changed.addEventListener
-    // 
+    //
     if (!featureFunction) {
 
       // 业务为校准方法
@@ -118,7 +139,7 @@ class Universal3DSceneInterface {
 
     this.tilesIdArraysOld = [];
     this.tilesMapRenderNow.forEach((primitiveTileDestory, idDestory) => {
-      {
+
         debugger
 
         // 去除几何
@@ -126,53 +147,8 @@ class Universal3DSceneInterface {
 
         // 更新渲染状态
         this.tilesMapRenderNow.delete(idDestory);
-      }
+
     });
-  }
-
-  /**
-   * 校准参数
-   */
-  calibration() {
-    let cameraPosition = this.camera.positionCartographic;
-
-    // 图块组变化后渲染
-    if (cameraPosition.height < this.requestHeight) {
-      if (
-        this.getTilesArrays(cameraPosition.longitude, cameraPosition.latitude)
-      ) {
-
-        //渲染待添加集合内几何数据
-        this.tilesMapWillAdd.forEach((positionArrays, id) => {
-
-          // 更新待添加状态
-          this.tilesMapWillAdd.delete(id);
-
-          // 测试  换成具体图形业务
-          this.testCameraBox(positionArrays, id);
-        });
-
-        // 删除范围外图块
-        this.tilesSetWillDelete.forEach((tileDelete) => {
-
-          // 更新待删除状态
-          this.tilesSetWillDelete.delete(tileDelete);
-
-          // 去除几何
-          this.viewer.scene.primitives.remove(
-            this.tilesMapRenderNow.get(tileDelete)
-          );
-
-          // 更新渲染状态
-          this.tilesMapRenderNow.delete(tileDelete);
-        });
-      }
-    }
-
-    // else {  TODO
-    //   //离开范围销毁渲染内容 不需要判断 空不循环
-    //   this.destoryTiles();
-    // }
   }
 
   /**
@@ -188,11 +164,11 @@ class Universal3DSceneInterface {
     id,
     renderArrayHeight
   ) {
-    let viewer = cesiumParams.viewer;
+    const viewer = cesiumParams.viewer;
 
     // 几何
     let primitiveTile = null;
-    let greenPolygonInstance = new Cesium.GeometryInstance({
+    const greenPolygonInstance = new Cesium.GeometryInstance({
       geometry: Cesium.PolygonGeometry.fromPositions({
         extrudedHeight: 10.0,
         positions: Cesium.Cartesian3.fromDegreesArray(positionArrays),
@@ -233,31 +209,31 @@ class Universal3DSceneInterface {
   getTilesArrays(lon, lat) {
 
     // osm  以-180->180(x) 90->-90(y)为坐标轴展开地图，以左上角为原点的经纬度值
-    let xLon = Math.PI + lon;
-    let yLat = Math.PI / 2 - lat;
-    let x = xLon / this.dlon; //levZ级OSM编号 小数 不能直接求余
-    let y = yLat / this.dlat;
+    const xLon = Math.PI + lon;
+    const yLat = Math.PI / 2 - lat;
+    const x = xLon / this.dlon; //levZ级OSM编号 小数 不能直接求余
+    const y = yLat / this.dlat;
 
     //levZ级OSM编号
-    let rowNew = Math.floor(y);
-    let colNew = Math.floor(x); //向下取整
-    let rowChange = rowNew - this.row; //增加的编号 +右移动
-    let colChange = colNew - this.col; //+下移动
+    const rowNew = Math.floor(y);
+    const colNew = Math.floor(x); //向下取整
+    const rowChange = rowNew - this.row; //增加的编号 +右移动
+    const colChange = colNew - this.col; //+下移动
     if (rowChange == 0 && colChange == 0) {
       return false; //图块无变化
     }
 
     //取新图块组
-    let tilesArrays = [];
-    let tilesIdArrays = [];
+    const tilesArrays = [];
+    const tilesIdArrays = [];
 
-    let PI = Math.PI;
-    let cc2rd = 180 / PI;
+    const PI = Math.PI;
+    const cc2rd = 180 / PI;
     for (let i = -this.tilesCountAdd; i <= this.tilesCountAdd; i++) {
       for (let j = -this.tilesCountAdd; j <= this.tilesCountAdd; j++) {
 
         // key图块行列号 value 图块四角坐标 [列 行号字符串，[经度，纬度]]
-        let tile = { id: colNew + j + " " + (rowNew + i) };
+        const tile = { id: colNew + j + " " + (rowNew + i), positionArrays: [] };
         tile.positionArrays = [
           ((colNew + j) * this.dlon - PI) * cc2rd, //
           (PI / 2 - (rowNew + i) * this.dlat) * cc2rd,
@@ -276,12 +252,12 @@ class Universal3DSceneInterface {
     }
 
     //最新一次的差集 旧集合不含有新集合的部分 删除  array
-    let tilesArraysDeleteNew = this.tilesIdArraysOld.filter(
+    const tilesArraysDeleteNew = this.tilesIdArraysOld.filter(
       (id) => !new Set(tilesIdArrays).has(id)
     );
 
     //最新一次的差集差集 新集合 旧的没有  添加  附带坐标   array包含id等
-    let tilesArraysAddNew = tilesArrays.filter(
+    const tilesArraysAddNew = tilesArrays.filter(
       (item) => !new Set(this.tilesIdArraysOld).has(item.id)
     );
 
@@ -322,7 +298,7 @@ class Universal3DSceneInterface {
   batchRender() {
 
     // 图块中心点  TODO 视线中心
-    let cameraPosition = this.camera.positionCartographic;
+    const cameraPosition = this.camera.positionCartographic;
 
     // 图块组变化后渲染
     if (

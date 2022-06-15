@@ -3,7 +3,7 @@ import { initSimple } from "../work/viwerWork/initSimple.js";
 import { TestDataAdd } from "../work/dataAdd/TestDataAdd.js";
 import { TestInteraction } from "../work/interaction/TestInteraction.js";
 import { ConstControl } from "../work/draw/ConstControl.js";
-import { MouseListen, BaseDraw, HoleDraw} from "../../../src/cesiumplugin.js";
+import { MouseListen, BaseDraw, HoleDraw} from "../../../src/cesium-dev-help.js";
 
 function workList() {
 
@@ -93,10 +93,10 @@ function addTest(testConfig, jqString) {
   for (let i = 0; i < testConfig.length; i++) {
     const element = testConfig[i];
     if (element.title) {
-      inHtml += ('<div ' + 'class="' + element.class + '">' + element.title + '</div>')
+      inHtml += '<div ' + 'class="' + element.class + '">' + element.title + '</div>'
     }
     if (element.name) {
-      inHtml += ('<button id = "' + element.name + i + '" class="' + element.class + '">' + element.name + '</button>')
+      inHtml += '<button id = "' + element.name + i + '" class="' + element.class + '">' + element.name + '</button>'
     }
 
   }

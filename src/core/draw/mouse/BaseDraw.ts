@@ -1,13 +1,35 @@
-/* eslint-disable no-empty */
-import { MouseListen } from "../../control/mouse/MouseListen.js"
-import { RenderSimple } from '../../renderGeom/RenderSimple.js'
-
+import { MouseListen } from "../../control/mouse/MouseListen"
+import { RenderSimple } from '../../renderGeom/RenderSimple'
+import { Cesium } from '../../outsource/LibManager';
 class BaseDraw extends MouseListen {
+  private pointDrawBool: boolean
+  private lineDrawBool: boolean
+  private polygonDrawBool: boolean
+  lineGroundDrawBool: boolean
+  polygonGroundDrawBool: boolean
+  storeEntities: boolean
+  linearr: any[]
+  pointColor: Cesium.Color
+  lineColor: Cesium.Color
+  polygonColor: Cesium.Color
+  PrimitiveAll: any
+  entities: Cesium.EntityCollection
+  mouseMovePointPrimitives: any
+  mouseMovePointPrimitivesCollection: any
+  pointPrimitives: any
+  thisPpolylinePrimitive: any
+  polygonPrimitives: any
+  _polylineGroundPrimitive: any
+  _polygonGroundPrimitive: any
+  mouseLinePrimitive: any
+  mousePolygonGroundEntity: any
+  mouseLineGroundEntity: any
+   clickPositions: any
 
   /**
-   * 基础绘制类  点线面 （贴地点，贴地线,贴地面） 
+   * 基础绘制类  点线面 （贴地点，贴地线,贴地面）
    * 自行继承组织点线面切面等几何图形
-   * @param {*} viewer 
+   * @param {*} viewer
    */
   constructor(viewer) {
     super(viewer)
@@ -37,24 +59,24 @@ class BaseDraw extends MouseListen {
       this.viewer.scene.primitives.add(new Cesium.PrimitiveCollection())
 
     // entity 总绘制
-    let myEntityCollection = new Cesium.CustomDataSource("clickEntityCollection");
+    const myEntityCollection = new Cesium.CustomDataSource("clickEntityCollection");
     this.viewer.dataSources.add(myEntityCollection);
     this.entities = myEntityCollection.entities
 
     // 鼠标移动指示  监听指示
-    if (!this._mouseMovePointPrimitives) {
-      this._mouseMovePointPrimitivesCollection = this.viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
-      this._mouseMovePointPrimitives =
-        RenderSimple.simplePointByPrimitives(this._mouseMovePointPrimitivesCollection, Cesium.Cartesian3.ZERO, 20, Cesium.Color.fromAlpha(Cesium.Color.RED, 0.5), 3.0)
+    if (!this.mouseMovePointPrimitives) {
+      this.mouseMovePointPrimitivesCollection = this.viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+      this.mouseMovePointPrimitives =
+        RenderSimple.simplePointByPrimitives(this.mouseMovePointPrimitivesCollection, Cesium.Cartesian3.ZERO, 20, Cesium.Color.fromAlpha(Cesium.Color.RED, 0.5), 3.0)
     }
 
     /**
      * 图形状态
      * 绘制点线面和其他
      */
-    this._pointPrimitives = this.PrimitiveAll.add(new Cesium.PointPrimitiveCollection()) //默认贴地
-    this._polylinePrimitive = this.PrimitiveAll.add(new Cesium.PolylineCollection()) //真实悬空线
-    this._polygonPrimitives = this.PrimitiveAll.add(new Cesium.PrimitiveCollection()) //真实纯粹多面  非顺序三角面（综合）
+    this.pointPrimitives = this.PrimitiveAll.add(new Cesium.PointPrimitiveCollection()) //默认贴地
+    this.thisPpolylinePrimitive = this.PrimitiveAll.add(new Cesium.PolylineCollection()) //真实悬空线
+    this.polygonPrimitives = this.PrimitiveAll.add(new Cesium.PrimitiveCollection()) //真实纯粹多面  非顺序三角面（综合）
     this._polylineGroundPrimitive = this.PrimitiveAll.add(new Cesium.PrimitiveCollection()) //贴地线
     this._polygonGroundPrimitive = this.PrimitiveAll.add(new Cesium.PrimitiveCollection()) //贴地面
 
@@ -79,28 +101,28 @@ class BaseDraw extends MouseListen {
   set click_MOUSE_MOVE(value) {
 
     // 开启监听提供指示
-    this._mouseMovePointPrimitives.position = this._clickPositions[this._clickPositions.length - 1]
+    this.mouseMovePointPrimitives.position = this.clickPositions[this.clickPositions.length - 1]
 
-    if (this.pointDrawBool) {}
-    if (this.lineDrawBool && this.mouseLinePrimitive) { this.mouseLinePrimitive.positions = this._clickPositions } //更新线
+    // if (this.pointDrawBool) {}
+    if (this.lineDrawBool && this.mouseLinePrimitive) { this.mouseLinePrimitive.positions = this.clickPositions } //更新线
 
-    if (this.polygonDrawBool) {}
-    if (this.lineGroundDrawBool && this.mouseLineGroundEntity) {}
-    if (this.polygonGroundDrawBool) {}
+    // if (this.polygonDrawBool) {}
+    // if (this.lineGroundDrawBool && this.mouseLineGroundEntity) {}
+    // if (this.polygonGroundDrawBool) {}
   }
 
   set click_LEFT_CLICK(value) {
 
-    let clickScene = this._clickPositions[this._clickPositions.length - 1]
-    if (this.pointDrawBool) { RenderSimple.simplePointByPrimitives(this._pointPrimitives, clickScene, 10, Cesium.Color.fromAlpha(this.pointColor, 0.5), 3.0) }
+    const clickScene = this.clickPositions[this.clickPositions.length - 1]
+    if (this.pointDrawBool) { RenderSimple.simplePointByPrimitives(this.pointPrimitives, clickScene, 10, Cesium.Color.fromAlpha(this.pointColor, 0.5), 3.0) }
     if (this.lineDrawBool) {
 
       // 不存在->添加初始线
-      this.mouseLinePrimitive = this.mouseLinePrimitive || RenderSimple.simpleLineByPrimitive(this._polylinePrimitive, this._clickPositions, 10, this.lineColor)
+      this.mouseLinePrimitive = this.mouseLinePrimitive ||
+      RenderSimple.simpleLineByPrimitive(this.thisPpolylinePrimitive, this.clickPositions, 10, this.lineColor, null)
     }
-    if (this.polygonDrawBool) {
 
-    }
+    // if (this.polygonDrawBool) { }
     if (this.lineGroundDrawBool) {
 
       if (!this.mouseLineGroundEntity) {
@@ -108,7 +130,7 @@ class BaseDraw extends MouseListen {
           name: 'line',
           polyline: {
             positions: new Cesium.CallbackProperty(() => {
-              return this._clickPositions;
+              return this.clickPositions;
             }, false),
             width: 3,
             material: Cesium.Color.fromAlpha(this.lineColor, 0.5),
@@ -124,17 +146,17 @@ class BaseDraw extends MouseListen {
     if (this.polygonGroundDrawBool) {
       if (!this.mousePolygonGroundEntity) {
         console.log('绘制')
-        console.log(this._clickPositions)
+        console.log(this.clickPositions)
 
         this.mousePolygonGroundEntity = this.entities.add({
 
           // name: 'polygon',
           polygon: {
             hierarchy: new Cesium.CallbackProperty(() => {
-              return new Cesium.PolygonHierarchy(this._clickPositions);
+              return new Cesium.PolygonHierarchy(this.clickPositions);
             }, false),
 
-            // hierarchy: new Cesium.PolygonHierarchy(this._clickPositions),
+            // hierarchy: new Cesium.PolygonHierarchy(this.clickPositions),
             material: Cesium.Color.fromAlpha(this.lineColor, 0.3),
           }
         });
@@ -144,7 +166,8 @@ class BaseDraw extends MouseListen {
   }
 
   set click_LEFT_DOUBLE_CLICK(value) {
-    let clickScene = this._clickPositions[this._clickPositions.length - 1]
+
+    // const clickScene = this.clickPositions[this.clickPositions.length - 1]
     if (this.pointDrawBool) { //无需绘制
     }
     if (this.lineDrawBool) {
@@ -155,24 +178,24 @@ class BaseDraw extends MouseListen {
 
       // this.mouseLineGroundEntity.polyline._callback = null
       if (this.storeEntities) {
-        this.mouseLineGroundEntity.polyline.positions = this._clickPositions
+        this.mouseLineGroundEntity.polyline.positions = this.clickPositions
       }
 
       this.mouseLineGroundEntity = null
     }
     if (this.polygonDrawBool) {
-      console.log('绘制真实面', this._clickPositions)
-      let color = Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromAlpha(this.pointColor, 0.5))
+      console.log('绘制真实面', this.clickPositions)
+      const color = Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromAlpha(this.pointColor, 0.5))
 
       // let color = Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromAlpha(Cesium.Color.WHITE, 0.5))
-      let polygonInstance = new Cesium.GeometryInstance({
+      const polygonInstance = new Cesium.GeometryInstance({
         geometry: new Cesium.PolygonGeometry({
-          polygonHierarchy: new Cesium.PolygonHierarchy(this._clickPositions),
+          polygonHierarchy: new Cesium.PolygonHierarchy(this.clickPositions),
           perPositionHeight: true,
         }),
         attributes: { color: color }
       });
-      this._polygonPrimitives.add(new Cesium.Primitive({
+      this.polygonPrimitives.add(new Cesium.Primitive({
         geometryInstances: [polygonInstance],
         appearance: new Cesium.PerInstanceColorAppearance()
       }));
@@ -182,17 +205,17 @@ class BaseDraw extends MouseListen {
 
       // let color = Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromAlpha(this.pointColor, 0.5))
       // let polygonInstance = new Cesium.GeometryInstance({
-      //   geometry: new Cesium.PolygonGeometry({ polygonHierarchy: new Cesium.PolygonHierarchy(this._clickPositions) }), // id: 'polygon ',
+      //   geometry: new Cesium.PolygonGeometry({ polygonHierarchy: new Cesium.PolygonHierarchy(this.clickPositions) }), // id: 'polygon ',
       //   attributes: { color: color }
       // });
       // this._polygonGroundPrimitive.add(new Cesium.GroundPrimitive({ geometryInstances: [polygonInstance] }));
 
-      // console.log('最终面', this._clickPositions)
+      // console.log('最终面', this.clickPositions)
       // this.mousePolygonGroundEntity = this.viewer.entities.add({
       //   name: 'polygon',
       //   polygon: {
       //     hierarchy: {
-      //       positions: this._clickPositions
+      //       positions: this.clickPositions
       //     },
       //     perPositionHeight: true, //对每个位置使用options.positions的height，而不使用options.height来确定高度
       //     extrudedHeight: 1,
@@ -203,7 +226,7 @@ class BaseDraw extends MouseListen {
       // });
       if (this.storeEntities) {
         console.log(this.mouseLineGroundEntity)
-        this.mousePolygonGroundEntity.polygon.hierarchy = new Cesium.PolygonHierarchy(this._clickPositions)
+        this.mousePolygonGroundEntity.polygon.hierarchy = new Cesium.PolygonHierarchy(this.clickPositions)
       }
       this.mousePolygonGroundEntity = null
     }
@@ -215,8 +238,8 @@ class BaseDraw extends MouseListen {
     super.removeAll()
 
     // 鼠标移动指示
-    this._mouseMovePointPrimitivesCollection.remove(this._mouseMovePointPrimitives)
-    this._mouseMovePointPrimitives = null
+    this.mouseMovePointPrimitivesCollection.remove(this.mouseMovePointPrimitives)
+    this.mouseMovePointPrimitives = null
 
     // 图形
     this.PrimitiveAll.removeAll()

@@ -1,11 +1,13 @@
+import { Cesium } from '../outsource/LibManager';
+
 class RenderSimple {
 
   /**
    * 无固定场景宽度点线面
    */
-  constructor() {
+  // constructor() {
 
-  }
+  // }
 
   /**
    * 带高程
@@ -23,7 +25,7 @@ class RenderSimple {
     outlineWidth
   ) {
 
-    let pointPrimitive = PrimitiveCollection.add({
+    const pointPrimitive = PrimitiveCollection.add({
       show: true,
       position: position,
       pixelSize: width,
@@ -39,7 +41,7 @@ class RenderSimple {
   // /**
   //  * 带高程
   //  * @param {*} PrimitiveCollection PrimitiveCollection
-  //  * @param {*} positions 
+  //  * @param {*} positions
   //  * @param {*} width 线宽
   //  * @param {*} color 颜色 "#FF0000"
   //  * @param {*} alpha 透明度
@@ -66,12 +68,12 @@ class RenderSimple {
   //   return linePrimitive
   // }
 
-  static simplePolygonByPrimitive(
-    PrimitiveCollection,
-    positions,
-    width,
-    color,
-    alpha) {}
+  // static simplePolygonByPrimitive(
+  //   PrimitiveCollection,
+  //   positions,
+  //   width,
+  //   color,
+  //   alpha) {}
 
   static simplePolygonByPrimitiveInstance(
     PrimitiveCollection,
@@ -100,7 +102,7 @@ class RenderSimple {
         }
       }
     }
-    let polygonInstance = new Cesium.GeometryInstance({
+    const polygonInstance = new Cesium.GeometryInstance({
       geometry: new Cesium.PolygonGeometry({
         polygonHierarchy: new Cesium.PolygonHierarchy(positions),
         perPositionHeight: true, //真实高度
@@ -144,7 +146,7 @@ class RenderSimple {
     });
   }
 
-  /** 
+  /**
    *            // 创建材质，在MaterialAppearance中若不添加基础材质，模型将会透明
               var material = new Cesium.Material.fromType("Color");
                   material.uniforms.color =  Cesium.Color.WHITE;
@@ -193,11 +195,11 @@ scene.primitives.add(new Cesium.Primitive({
     PrimitiveCollection,
     coordinates,
     width,
-    color,
-    alpha
+    color:Cesium.Color,
+    alpha:number
   ) {
-    let boolAlpha = (alpha != null)
-    let linePrimitive = new Cesium.Primitive({
+    const boolAlpha = alpha !== null
+    const linePrimitive = new Cesium.Primitive({
       geometryInstances: new Cesium.GeometryInstance({
         geometry: new Cesium.PolylineGeometry({
           positions: Cesium.Cartesian3.fromDegreesArray(coordinates),
@@ -206,7 +208,7 @@ scene.primitives.add(new Cesium.Primitive({
         }),
         attributes: {
           color: Cesium.ColorGeometryInstanceAttribute.fromColor(
-            Cesium.Color.fromCssColorString(color).withAlpha(alpha)
+            color.withAlpha(boolAlpha ? alpha : 1)
           ), //color  必须设置 不然没有效果
         },
       }),
@@ -235,8 +237,8 @@ scene.primitives.add(new Cesium.Primitive({
     color,
     alpha
   ) {
-    let boolAlpha = alpha || false
-    let linePrimitive = new Cesium.Primitive({
+    const boolAlpha = alpha || false
+    const linePrimitive = new Cesium.Primitive({
       geometryInstances: new Cesium.GeometryInstance({
         geometry: new Cesium.PolylineGeometry({
           positions: positions || Cesium.Cartesian3.fromDegreesArrayHeights(coordinates),
@@ -258,7 +260,7 @@ scene.primitives.add(new Cesium.Primitive({
     PrimitiveCollection.add(linePrimitive)
   }
 
-  /** 
+  /**
    *            // 创建材质，在MaterialAppearance中若不添加基础材质，模型将会透明
               var material = new Cesium.Material.fromType("Color");
                   material.uniforms.color =  Cesium.Color.WHITE;

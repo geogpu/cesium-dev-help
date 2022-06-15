@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { ClippingPlanesByGeom, CameraPro, RenderGlb, LocalAndWorldTransform, RenderSimple} from '../../../../src/cesiumplugin.js'
+import { ClippingPlanesByGeom, CameraPro, RenderGlb, LocalAndWorldTransform, RenderSimple} from '../../../../src/cesium-dev-help.js'
 
 /**
  * 高度分层
@@ -23,8 +23,8 @@ class MoveEntityCollectionRow {
   }
 
   /**
-   * 
-   * @param {*} geomPositionsDown 
+   *
+   * @param {*} geomPositionsDown
    * @param {*} oneFloorHeight  单层高度
    * @param {*} floors 楼层数
    * @param {*} precision 单层分割数（精度）  默认单层不分层1   （？多层三点贝塞尔？）
@@ -38,7 +38,7 @@ class MoveEntityCollectionRow {
     // // 局部ENU坐标系 转换系数
     let localAndWorldTransform = new LocalAndWorldTransform(
       geomPositionsDown[1]//简写 没用中心点 底面边角可能翘边
-    ) 
+    )
     let groundPositionsLength = geomPositionsDown.length //上底面点数 柱子数
     // let pillarsPositoinsLength = Math.floor(height / precision) + 1 //柱子点数
     let pillarsPositoinsLength = floors * precision + 1 //加1顶面 柱子点数
@@ -79,7 +79,7 @@ class MoveEntityCollectionRow {
 
       // geomPositionsFullArrays.push([])
       // 包围立面
-  
+
       for (let j = 0; j < pillarsPositoinsLength - 1; j++) {
 
         // 单立柱拼接
@@ -155,7 +155,7 @@ class MoveEntityCollectionRow {
     for (let index = 0; index < geomPositionsFullArrays.length; index++) {
 
     // for (let index = 0; index < 3; index++) {
-      
+
       let mousePolygonGroundEntity = this.entities.add({
         polygon: {
           hierarchy: new Cesium.CallbackProperty(() => {
@@ -188,7 +188,7 @@ class MoveEntityCollectionRow {
     //len 周期数
     let x = dtime + h / 100
     let y =
-      (h / 60) * amplitude * Math.sin(palstance * x + initialPhase) + setover
+      h / 60 * amplitude * Math.sin(palstance * x + initialPhase) + setover
 
     // console.log('y', y)
     return y //单方向偏移量

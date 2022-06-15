@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
-import { ClippingPlanesByGeom, CameraPro, RenderGlb, LocalAndWorldTransform, RenderSimple} from '../../../../src/cesiumplugin.js'
+import { ClippingPlanesByGeom, CameraPro, RenderGlb, LocalAndWorldTransform, RenderSimple} from '../../../../src/cesium-dev-help.js'
 class MoveEntityCollection {
 
   /**
@@ -182,7 +182,7 @@ class MoveEntityCollection {
     //len 周期数
     let x = dtime + h / 100
     let y =
-      (h / 60) * amplitude * Math.sin(palstance * x + initialPhase) + setover
+      h / 60 * amplitude * Math.sin(palstance * x + initialPhase) + setover
 
     // console.log('y', y)
     return y //单方向偏移量

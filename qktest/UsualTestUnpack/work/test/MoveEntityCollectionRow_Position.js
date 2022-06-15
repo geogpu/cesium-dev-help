@@ -6,7 +6,7 @@ import {
   RenderGlb,
   LocalAndWorldTransform,
   RenderSimple,
-} from '../../../../src/cesiumplugin.js'
+} from '../../../../src/cesium-dev-help.js'
 
 /**
  * 高度分层
