@@ -13,7 +13,7 @@ class InitViewer {
 
   }
 
-  static getInstance(defaultAccessToken: string) {
+  static getInstance(defaultAccessToken: string|null) {
     if (!this.Instance) {
       this.Instance = new InitViewer(defaultAccessToken);
     }
