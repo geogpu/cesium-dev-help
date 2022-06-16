@@ -68,7 +68,24 @@ let esbuildES6 = async() => { //打包
     minify: true, //压缩
     format: 'esm',
     logLevel: 'info', //控制台信息
-    external: ['cesium'], //剔除外部依赖
+    external: ['cesium','@turf/turf'], //剔除外部依赖
+    // tsconfig: 'tsconfig.json', //指定tsconfig.json
+  })
+}
+
+
+// 非压缩
+let esbuildES6NoMinify = async() => { //打包
+  console.log('esbuild es6 nominify')
+  let out = esbuild.buildSync({
+    entryPoints: [coreBasePath + name + '.ts'], //entryPoints: ['index.js'] 
+    outfile: 'distNoMinify/' + name + '.js', //outfile: 'out.js',
+    sourcemap: true, //调试关联
+    bundle: true, //单一文件
+    minify: false, //压缩
+    format: 'esm',
+    logLevel: 'info', //控制台信息
+    external: ['cesium','@turf/turf'], //剔除外部依赖
     // tsconfig: 'tsconfig.json', //指定tsconfig.json
   })
 }
@@ -82,5 +99,5 @@ let _filePathToModuleId = (moduleId) => {
 let GULP_CONNECT = gulpConnect;
 let GULP_PACKAGE = createEachPGJs;//生成文件头
 let GULP_BUILD = series(createEachPGJs, esbuildES6);//生成文件头并打包 mjs ts
-
-export { GULP_CONNECT, GULP_PACKAGE, GULP_BUILD }
+let GULP_BUILD_NOMINI = series(createEachPGJs, esbuildES6NoMinify);//生成文件头并打包 非压缩js ts
+export { GULP_CONNECT, GULP_PACKAGE, GULP_BUILD,GULP_BUILD_NOMINI }

@@ -1,18 +1,54 @@
-## 快速上手
+##  运行依赖：（只import引用不打包在内部）  
+cesium,turf
+
+```js
+// pnpm i -S cesium
+pnpm i -S cesium
+
+pnpm i -S @turf/turf
+//  pnpm i -peerdeps cesium 
+
+```
+
+## esbuild
+设置后 external: ['cesium','@turf/turf'], //剔除外部依赖
+添加
+import * as Cesium from "cesium";
+import * as turf from "@turf/turf";
+
+
+
+## 开发环境依赖：  
+globby,esbuild,eslint,gulp,mocha,typescript
+
 使用esbuild快速打包、gulp编排流程、tsc创建声明文件
 ```js
 //项目初始化并且安装依赖
 pnpm init -y
 pnpm install esbuild --save-dev
 
-//项目文件 index.js
+//设置ts打包设置
+pnpm i -D typescript
+// 设置ts eslint规则
+eslint --init
 
-import { log } from './logger'
 
-import messages from './messages'
 
-// 使用模块成员
-const msg = messages.hi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 log(msg)
 

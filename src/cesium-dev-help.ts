@@ -1,4 +1,4 @@
-export const VERSION = '0.0.4';
+export const VERSION = '0.0.5';
 export { InitViewer } from './core/init/InitViewer'
 export { ViwerSet } from './core/init/ViwerSet'
 export { ComputationalGeom } from './core/math/ComputationalGeom'
@@ -15,7 +15,7 @@ export { M4Translate } from './core/translate/M4Translate'
 export { MouseClickTrans } from './core/translate/MouseClickTrans'
 export { TranslateSevenParams } from './core/translate/TranslateSevenParams'
 export { WorldPositionTransform } from './core/translate/WorldPositionTransform'
+export { BaseDraw } from './core/draw/mouse/BaseDraw'
 export { CameraPro } from './core/control/camera/CameraPro'
 export { HandlerManager } from './core/control/event/HandlerManager'
 export { MouseListen } from './core/control/mouse/MouseListen'
-export { BaseDraw } from './core/draw/mouse/BaseDraw'
