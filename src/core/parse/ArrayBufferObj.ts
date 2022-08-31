@@ -1,0 +1,5 @@
+class ArrayBufferObj {
+
+}
+
+export{ArrayBufferObj}

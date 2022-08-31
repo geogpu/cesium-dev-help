@@ -16,30 +16,20 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "gulp GULP_BUILD",
-    "tsc_build": "tsc --build tsconfig.json",
-    "package_index": "gulp GULP_PACKAGE",
+    "build（完整构建）": "gulp GULP_BUILD",
+    "tsc_build（ts声明文件.d.ts）": "tsc --build tsconfig.json",
+    "package_index（更新文件头）": "gulp GULP_PACKAGE",
+    "build_test（快速测试）": "gulp GULP_TEST",
     "build_max": "gulp GULP_BUILD_NOMINI",
-    "gulp_list": "gulp --tasks",
-    "gulp_connect": "gulp GULP_CONNECT",
-    "install_all": "pnpm i",
-    "npm_publish": "npm publish",
-    "pnpm_outdated": "pnpm outdated",
-    "pnpm_update": "pnpm update",
-    "custom_qkflow": "node Tools/workflow/qkflow.js version"
+    "gulp_list（gulp结构）": "gulp --tasks",
+    "gulp_connect（gulp连接性测试）": "gulp GULP_CONNECT",
+    "install_all（安装依赖）": "pnpm i",
+    "npm_publish（npm发布）": "npm publish",
+    "pnpm_outdated（依赖版本）": "pnpm outdated",
+    "pnpm_update（依赖非强制升级）": "pnpm update",
+    "custom_qkflow（qk工作流）": "node Tools/workflow/qkflow.js version"
   },
   "devDependencies": {
-    "@types/node": "^17.0.43",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
-    "esbuild": "^0.14.43",
-    "eslint": "^7.32.0",
-    "globby": "^12.2.0",
-    "gulp": "^4.0.2",
-    "mocha": "^9.2.2",
-    "typescript": "^4.7.3",
-    "@turf/turf": "^6.5.0",
-    "cesium": "^1.94.3",
     "@turf/along": "^6.5.0",
     "@turf/angle": "^6.5.0",
     "@turf/area": "^6.5.0",
@@ -142,14 +132,23 @@
     "@turf/transform-translate": "^6.5.0",
     "@turf/triangle-grid": "^6.5.0",
     "@turf/truncate": "^6.5.0",
+    "@turf/turf": "^6.5.0",
     "@turf/union": "^6.5.0",
     "@turf/unkink-polygon": "^6.5.0",
-    "@turf/voronoi": "^6.5.0"
-  },
-  "dependencies": {
+    "@turf/voronoi": "^6.5.0",
+    "@types/node": "^17.0.45",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "cesium": "^1.95.0",
+    "esbuild": "^0.14.50",
+    "eslint": "^7.32.0",
+    "globby": "^12.2.0",
+    "gulp": "^4.0.2",
+    "mocha": "^9.2.2",
+    "typescript": "^4.7.4"
   },
   "peerDependencies": {
     "@turf/turf": "^6.5.0",
-    "cesium": "^1.94.3"
+    "cesium": "^1.95.0"
   }
 }

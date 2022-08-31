@@ -4,7 +4,7 @@
     //"noImplicitAny": true,                          /*没有任何隐式 */
     //"removeComments": true,                         /*移除注释 */
     //"preserveConstEnums": true,                     /*保留常量枚举 */
-    "outFile": "dist/cesium-dev-help.js",             /*输出文件 */
+    "outFile": "dist/cesium-dev-help",             /*输出文件 */
     "sourceMap": true,                                /*生成sourceMap */
     "declaration": true,                              /*生成.d.ts文件 */
     "declarationMap": true,                           /*生成.d.ts.map文件 */

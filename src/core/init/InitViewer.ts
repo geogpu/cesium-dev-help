@@ -1,23 +1,24 @@
-import { Cesium } from '../outsource/LibManager';
+import { Cesium } from '../outsource/LibManager'
 class InitViewer {
-  viewers: Map<string, Cesium.Viewer>;
-  static Instance: InitViewer;
+  viewers: Map<string, Cesium.Viewer>
+  static Instance: InitViewer
 
   /**
    *
    * @param {*} defaultAccessToken 外网cesium ion 密钥
    */
-  constructor(defaultAccessToken: string|null) {
+  constructor(defaultAccessToken: string | null) {
     this.viewers = new Map()
-    Cesium.Ion.defaultAccessToken = defaultAccessToken || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MTRiM2IxYy1iZGZkLTRmOTktYWVhMi0xZTE2ZjU4NzliMDMiLCJpZCI6Mzc0NjAsImlhdCI6MTYwNTA3NzQ1MX0.GEvT_KwEV9MjAqyXHyS-ezcITyKc53X3MQDWBLPElI0'
-
+    Cesium.Ion.defaultAccessToken =
+      defaultAccessToken ||
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MTRiM2IxYy1iZGZkLTRmOTktYWVhMi0xZTE2ZjU4NzliMDMiLCJpZCI6Mzc0NjAsImlhdCI6MTYwNTA3NzQ1MX0.GEvT_KwEV9MjAqyXHyS-ezcITyKc53X3MQDWBLPElI0'
   }
 
-  static getInstance(defaultAccessToken: string|null) {
+  static getInstance(defaultAccessToken: string | null) {
     if (!this.Instance) {
-      this.Instance = new InitViewer(defaultAccessToken);
+      this.Instance = new InitViewer(defaultAccessToken)
     }
-    return this.Instance;
+    return this.Instance
   }
 
   addViewer(viewerId: string) {
@@ -33,16 +34,16 @@ class InitViewer {
       geocoder: false, //Geocoder小部件。 地理编码查询//布尔 | Array。< GeocoderService > 	<可选>
       homeButton: false, //HomeButton小部件。
       infoBox: false, //InfoBox小部件。
-      sceneModePicker: false,  //SceneModePicker小部件。
+      sceneModePicker: false, //SceneModePicker小部件。
       selectionIndicator: false, //true 	如果设置为false，将不会创建SelectionIndicator小部件。
-      timeline: !false,  //true 	如果设置为false，则不会创建“时间轴”窗口小部件。
+      timeline: !false, //true 	如果设置为false，则不会创建“时间轴”窗口小部件。
       navigationHelpButton: false, //true 	如果设置为false，将不会创建导航帮助按钮。
       navigationInstructionsInitiallyVisible: false, //true 	如果导航说明最初应该是可见的，则为true；如果直到用户明确单击该按钮才显示，则为false。
       //scene3DOnly: true,//false 	true设为时，每个几何实例将仅以3D渲染以节省GPU内存。
       //shouldAnimate : true,//false 	true默认情况下时钟是否应尝试提前模拟时间，false否则。此选项优先于setting Viewer#clockViewModel。
 
       // *****************************测试用的*********************************
-     // clockViewModel // 新ClockViewModel（clock） 	用于控制当前时间的时钟视图模型。ClockViewModel 	<可选>
+      // clockViewModel // 新ClockViewModel（clock） 	用于控制当前时间的时钟视图模型。ClockViewModel 	<可选>
       // selectedImageryProviderViewModel 	ProviderViewModel  // 当前基础影像图层的视图模型（如果未提供）将使用第一个可用的基础图层。仅当“ baseLayerPicker”设置为true时，此值才有效。	<可选>
       // createDefaultImageryProviderViewModels（） 	可以从BaseLayerPicker中选择的ProviderViewModels数组。仅当“ baseLayerPicker”设置为true时，此值才有效。
       // imageryProviderViewModels 	Array。< ProviderViewModel > 	<可选>
@@ -101,14 +102,17 @@ class InitViewer {
 
       // requestRenderMode: false,  //   0.0 	如果requestRenderMode为true，则此值定义在请求渲染之前允许的最大模拟时间更改。请参见使用显式渲染提高性能。
       // maximumRenderTimeChange 	数字 	<可选>
+    })
 
-    });
-    viewer.imageryLayers.removeAll()//清除图层
+    //去除版权信息
+    // const creditContainer = viewer.cesiumWidget.creditContainer as HTMLElement
+    // creditContainer.style.display = 'none'
+
+    // viewer.imageryLayers.removeAll() //清除图层
     this.viewers.set(viewerId, viewer)
 
-    return viewer;
+    return viewer
   }
-
 }
 export { InitViewer }
 

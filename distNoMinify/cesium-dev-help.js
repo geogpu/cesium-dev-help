@@ -1,3 +1,24 @@
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+
 // src/core/outsource/LibManager.ts
 import * as Cesium from "cesium";
 import * as turf from "@turf/turf";
@@ -12,65 +33,6 @@ var LibManager = class {
     return "Cesium turf";
   }
 };
-
-// src/core/init/InitViewer.ts
-var InitViewer = class {
-  constructor(defaultAccessToken) {
-    this.viewers = /* @__PURE__ */ new Map();
-    Cesium.Ion.defaultAccessToken = defaultAccessToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MTRiM2IxYy1iZGZkLTRmOTktYWVhMi0xZTE2ZjU4NzliMDMiLCJpZCI6Mzc0NjAsImlhdCI6MTYwNTA3NzQ1MX0.GEvT_KwEV9MjAqyXHyS-ezcITyKc53X3MQDWBLPElI0";
-  }
-  static getInstance(defaultAccessToken) {
-    if (!this.Instance) {
-      this.Instance = new InitViewer(defaultAccessToken);
-    }
-    return this.Instance;
-  }
-  addViewer(viewerId) {
-    const viewer = new Cesium.Viewer(viewerId, {
-      animation: true,
-      baseLayerPicker: true,
-      fullscreenButton: true,
-      vrButton: false,
-      geocoder: false,
-      homeButton: false,
-      infoBox: false,
-      sceneModePicker: false,
-      selectionIndicator: false,
-      timeline: true,
-      navigationHelpButton: false,
-      navigationInstructionsInitiallyVisible: false
-    });
-    viewer.imageryLayers.removeAll();
-    this.viewers.set(viewerId, viewer);
-    return viewer;
-  }
-};
-
-// src/core/init/ViwerSet.ts
-function ViwerSet(viewer) {
-  viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-  viewer.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
-  if (window.navigator.userAgent.toLowerCase().indexOf("msie") >= 0) {
-    viewer.targetFrameRate = 20;
-    viewer.requestRenderMode = true;
-  }
-  viewer.scene.logarithmicDepthBuffer = false;
-  viewer.scene.postProcessStages.fxaa.enabled = false;
-  console.log("--------", "postProcessStages.fxaa.enabled = true");
-  viewer.scene.highDynamicRange = false;
-  Cesium.RequestScheduler.maximumRequests = 100;
-  Cesium.RequestScheduler.maximumRequestsPerServer = 100;
-  if (viewer.sceneModePicker)
-    viewer.sceneModePicker.viewModel.duration = 0;
-  const supportsImageRenderingPixelated = viewer.cesiumWidget._supportsImageRenderingPixelated;
-  if (supportsImageRenderingPixelated) {
-    let vtxf_dpr = window.devicePixelRatio;
-    while (vtxf_dpr >= 2) {
-      vtxf_dpr /= 2;
-    }
-    viewer.resolutionScale = vtxf_dpr;
-  }
-}
 
 // src/core/math/ComputationalGeom.ts
 var ComputationalGeom = class {
@@ -110,6 +72,68 @@ var ComputationalGeom = class {
     return polygonDirection;
   }
 };
+
+// src/core/init/InitViewer.ts
+var InitViewer = class {
+  constructor(defaultAccessToken) {
+    this.viewers = /* @__PURE__ */ new Map();
+    Cesium.Ion.defaultAccessToken = defaultAccessToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MTRiM2IxYy1iZGZkLTRmOTktYWVhMi0xZTE2ZjU4NzliMDMiLCJpZCI6Mzc0NjAsImlhdCI6MTYwNTA3NzQ1MX0.GEvT_KwEV9MjAqyXHyS-ezcITyKc53X3MQDWBLPElI0";
+  }
+  static getInstance(defaultAccessToken) {
+    if (!this.Instance) {
+      this.Instance = new InitViewer(defaultAccessToken);
+    }
+    return this.Instance;
+  }
+  addViewer(viewerId) {
+    const viewer = new Cesium.Viewer(viewerId, {
+      animation: true,
+      baseLayerPicker: true,
+      fullscreenButton: true,
+      vrButton: false,
+      geocoder: false,
+      homeButton: false,
+      infoBox: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: true,
+      navigationHelpButton: false,
+      navigationInstructionsInitiallyVisible: false
+    });
+    this.viewers.set(viewerId, viewer);
+    return viewer;
+  }
+};
+
+// src/core/init/ViwerSet.ts
+function ViwerSet(viewer) {
+  viewer.screenSpaceEventHandler.removeInputAction(
+    Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
+  );
+  viewer.screenSpaceEventHandler.removeInputAction(
+    Cesium.ScreenSpaceEventType.LEFT_CLICK
+  );
+  if (window.navigator.userAgent.toLowerCase().indexOf("msie") >= 0) {
+    viewer.targetFrameRate = 20;
+    viewer.requestRenderMode = true;
+  }
+  viewer.scene.logarithmicDepthBuffer = false;
+  viewer.scene.postProcessStages.fxaa.enabled = false;
+  console.log("--------", "postProcessStages.fxaa.enabled = true");
+  viewer.scene.highDynamicRange = false;
+  Cesium.RequestScheduler.maximumRequests = 100;
+  Cesium.RequestScheduler.maximumRequestsPerServer = 100;
+  if (viewer.sceneModePicker)
+    viewer.sceneModePicker.viewModel.duration = 0;
+  const supportsImageRenderingPixelated = viewer.cesiumWidget._supportsImageRenderingPixelated;
+  if (supportsImageRenderingPixelated) {
+    let vtxf_dpr = window.devicePixelRatio;
+    while (vtxf_dpr >= 2) {
+      vtxf_dpr /= 2;
+    }
+    viewer.resolutionScale = vtxf_dpr;
+  }
+}
 
 // src/core/control/mouse/MouseListen.ts
 var MouseListen = class {
@@ -174,7 +198,10 @@ var MouseListen = class {
   singleLeftClickBool() {
     const click_LEFT_CLICK_TimeNew = new Date();
     const leftClickTimeBool = click_LEFT_CLICK_TimeNew.getTime() - this.click_LEFT_CLICK_Time.getTime() > 300;
-    const leftClickDistanceBool = this.clickPositions.length < 2 || Cesium.Cartesian3.distance(this.clickPositions[this.clickPositions.length - 1], this.clickPositions[this.clickPositions.length - 2]) > 0.1;
+    const leftClickDistanceBool = this.clickPositions.length < 2 || Cesium.Cartesian3.distance(
+      this.clickPositions[this.clickPositions.length - 1],
+      this.clickPositions[this.clickPositions.length - 2]
+    ) > 0.1;
     this.click_LEFT_CLICK_Time = click_LEFT_CLICK_TimeNew;
     return leftClickTimeBool || leftClickDistanceBool;
   }
@@ -186,6 +213,18 @@ var MouseListen = class {
 
 // src/core/mouse/HoleDraw.ts
 var HoleDraw = class extends MouseListen {
+};
+
+// src/core/parse/ArrayBufferObj.ts
+var ArrayBufferObj = class {
+};
+
+// src/core/parse/Geojson2ArrayBufferObj.ts
+var Geojson2ArrayBufferObj = class {
+};
+
+// src/core/parse/Shp2ArrayBufferObj.ts
+var Shp2ArrayBufferObj = class {
 };
 
 // src/core/renderGeom/RenderInstance.ts
@@ -202,15 +241,37 @@ var RenderInstance = class {
       }),
       id
     });
-    PrimitiveCollection.add(new Cesium.Primitive({
-      geometryInstances: [polylinevolumeinstance],
-      appearance: new Cesium.MaterialAppearance({
-        material: Cesium.Material.fromType("Color", {
-          color: Cesium.Color.fromAlpha(Cesium.Color.fromCssColorString("#79D9FF"), 0.4)
-        }),
-        flat: true
+    PrimitiveCollection.add(
+      new Cesium.Primitive({
+        geometryInstances: [polylinevolumeinstance],
+        appearance: new Cesium.MaterialAppearance({
+          material: Cesium.Material.fromType("Color", {
+            color: Cesium.Color.fromAlpha(
+              Cesium.Color.fromCssColorString("#79D9FF"),
+              0.4
+            )
+          }),
+          flat: true
+        })
       })
-    }));
+    );
+  }
+  lineByPrimitive(geoJsonLine, width, color, alpha) {
+    const linePrimitive = new Cesium.GroundPolylinePrimitive({
+      geometryInstances: new Cesium.GeometryInstance({
+        geometry: new Cesium.GroundPolylineGeometry({
+          positions: Cesium.Cartesian3.fromDegreesArray(geoJsonLine),
+          width
+        })
+      }),
+      appearance: new Cesium.PolylineMaterialAppearance({
+        translucent: alpha !== null,
+        material: Cesium.Material.fromType("Color", {
+          color
+        })
+      })
+    });
+    return linePrimitive;
   }
 };
 
@@ -257,25 +318,29 @@ var RenderSimple = class {
         perPositionHeight: true
       })
     });
-    PrimitiveCollection.add(new Cesium.Primitive({
-      geometryInstances: [polygonInstance],
-      appearance: new Cesium.MaterialAppearance({
-        material: new Cesium.Material(materialOption)
+    PrimitiveCollection.add(
+      new Cesium.Primitive({
+        geometryInstances: [polygonInstance],
+        appearance: new Cesium.MaterialAppearance({
+          material: new Cesium.Material(materialOption)
+        })
       })
-    }));
+    );
   }
   static simpleVolumeBox(PrimitiveCollection, coordinates, width, color, alpha) {
     PrimitiveCollection.add({
       show: true,
       position: Cesium.Cartesian3.ZERO,
       pixelSize: width,
-      color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromCssColorString(color).withAlpha(alpha)),
+      color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+        Cesium.Color.fromCssColorString(color).withAlpha(alpha)
+      ),
       outlineColor: Cesium.Color.TRANSPARENT,
       outlineWidth: 0,
       id: void 0
     });
   }
-  static simpleLineByPrimitive(PrimitiveCollection, coordinates, width, color, alpha) {
+  static simpleLineByPrimitive(PrimitiveCollection, coordinates, width = 1, color, alpha) {
     const boolAlpha = alpha !== null;
     const linePrimitive = new Cesium.Primitive({
       geometryInstances: new Cesium.GeometryInstance({
@@ -285,7 +350,9 @@ var RenderSimple = class {
           vertexFormat: Cesium.PolylineColorAppearance.VERTEX_FORMAT
         }),
         attributes: {
-          color: Cesium.ColorGeometryInstanceAttribute.fromColor(color.withAlpha(boolAlpha ? alpha : 1))
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+            color.withAlpha(boolAlpha ? alpha : 1)
+          )
         }
       }),
       appearance: new Cesium.PolylineColorAppearance({
@@ -304,7 +371,9 @@ var RenderSimple = class {
           vertexFormat: Cesium.PolylineColorAppearance.VERTEX_FORMAT
         }),
         attributes: {
-          color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromCssColorString(color).withAlpha(alpha))
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+            Cesium.Color.fromCssColorString(color).withAlpha(alpha)
+          )
         }
       }),
       appearance: new Cesium.PolylineColorAppearance({
@@ -312,6 +381,45 @@ var RenderSimple = class {
       })
     });
     PrimitiveCollection.add(linePrimitive);
+  }
+  static simpleEntitiesGeojson(viewer, json, cssColorString, height, extrudedHeight, callBack, clickColorString) {
+    return __async(this, null, function* () {
+      const dataSource = yield Cesium.GeoJsonDataSource.load(json);
+      viewer.dataSources.add(dataSource);
+      const color = Cesium.Color.fromCssColorString(cssColorString);
+      const entities = dataSource.entities.values;
+      for (let i = 0; i < entities.length; i += 1) {
+        const entity = entities[i];
+        entity.polygon.material = color;
+        entity.polygon.outline = false;
+        entity.polygon.height = entity.properties[height];
+        entity.polygon.extrudedHeight = entity.properties[extrudedHeight];
+      }
+      if (!callBack)
+        return;
+      if (!clickColorString)
+        clickColorString = new Cesium.Color(1, 1, 1, 0.5);
+      const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      let lastSelectedEntity = null;
+      handler.setInputAction((click) => {
+        if (lastSelectedEntity)
+          lastSelectedEntity.polygon.material = Cesium.Color.fromCssColorString(cssColorString);
+        const pickedFeature = viewer.scene.pick(click.position);
+        if (!pickedFeature || !(pickedFeature["id"] instanceof Cesium.Entity))
+          return;
+        const thisEntity = pickedFeature["id"];
+        thisEntity.polygon.material = new Cesium.Color(1, 1, 1, 1);
+        lastSelectedEntity = thisEntity;
+        if (callBack)
+          callBack(thisEntity);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      const remove = () => {
+        viewer.dataSources.remove(dataSource);
+        handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      };
+      console.log("remove", remove);
+      return remove;
+    });
   }
 };
 
@@ -419,10 +527,15 @@ var CesiumPrimitivesProvider = class {
         vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
       }),
       attributes: {
-        distanceDisplayCondition: new Cesium.DistanceDisplayConditionGeometryInstanceAttribute(renderArrayHeight[0], renderArrayHeight[1]),
-        color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromRandom({
-          alpha: 0.5
-        }))
+        distanceDisplayCondition: new Cesium.DistanceDisplayConditionGeometryInstanceAttribute(
+          renderArrayHeight[0],
+          renderArrayHeight[1]
+        ),
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+          Cesium.Color.fromRandom({
+            alpha: 0.5
+          })
+        )
       }
     });
     primitiveTile = new Cesium.Primitive({
@@ -471,8 +584,12 @@ var CesiumPrimitivesProvider = class {
         tilesIdArrays.push(tile.id);
       }
     }
-    const tilesArraysDeleteNew = this.tilesIdArraysOld.filter((id) => !new Set(tilesIdArrays).has(id));
-    const tilesArraysAddNew = tilesArrays.filter((item) => !new Set(this.tilesIdArraysOld).has(item.id));
+    const tilesArraysDeleteNew = this.tilesIdArraysOld.filter(
+      (id) => !new Set(tilesIdArrays).has(id)
+    );
+    const tilesArraysAddNew = tilesArrays.filter(
+      (item) => !new Set(this.tilesIdArraysOld).has(item.id)
+    );
     if (this.tilesIdArraysOld) {
       for (let i = 0; i < tilesArraysDeleteNew.length; i++) {
         this.tilesSetWillDelete.add(tilesArraysDeleteNew[i]);
@@ -480,7 +597,10 @@ var CesiumPrimitivesProvider = class {
       }
     }
     for (let i = 0; i < tilesArraysAddNew.length; i++) {
-      this.tilesMapWillAdd.set(tilesArraysAddNew[i].id, tilesArraysAddNew[i].positionArrays);
+      this.tilesMapWillAdd.set(
+        tilesArraysAddNew[i].id,
+        tilesArraysAddNew[i].positionArrays
+      );
     }
     this.tilesIdArraysOld = tilesIdArrays.slice();
     this.row = Math.floor(y);
@@ -492,11 +612,19 @@ var CesiumPrimitivesProvider = class {
     if (cameraPosition.height < this.requestHeight && this.getTilesArrays(cameraPosition.longitude, cameraPosition.latitude)) {
       this.tilesMapWillAdd.forEach((positionArrays, id) => {
         this.tilesMapWillAdd.delete(id);
-        this.featureFunction(this.cesiumParams, this.tilesMapRenderNow, positionArrays, id, this.renderArrayHeight);
+        this.featureFunction(
+          this.cesiumParams,
+          this.tilesMapRenderNow,
+          positionArrays,
+          id,
+          this.renderArrayHeight
+        );
       });
       this.tilesSetWillDelete.forEach((tileDelete) => {
         if (this.tilesMapRenderNow.get(tileDelete)) {
-          this.viewer.scene.primitives.remove(this.tilesMapRenderNow.get(tileDelete));
+          this.viewer.scene.primitives.remove(
+            this.tilesMapRenderNow.get(tileDelete)
+          );
           this.tilesSetWillDelete.delete(tileDelete);
           this.tilesMapRenderNow.delete(tileDelete);
         }
@@ -570,10 +698,15 @@ var Universal3DSceneInterface = class {
         vertexFormat: Cesium.PerInstanceColorAppearance.VERTEX_FORMAT
       }),
       attributes: {
-        distanceDisplayCondition: new Cesium.DistanceDisplayConditionGeometryInstanceAttribute(renderArrayHeight[0], renderArrayHeight[1]),
-        color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromRandom({
-          alpha: 0.5
-        }))
+        distanceDisplayCondition: new Cesium.DistanceDisplayConditionGeometryInstanceAttribute(
+          renderArrayHeight[0],
+          renderArrayHeight[1]
+        ),
+        color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+          Cesium.Color.fromRandom({
+            alpha: 0.5
+          })
+        )
       }
     });
     primitiveTile = new Cesium.Primitive({
@@ -619,8 +752,12 @@ var Universal3DSceneInterface = class {
         tilesIdArrays.push(tile.id);
       }
     }
-    const tilesArraysDeleteNew = this.tilesIdArraysOld.filter((id) => !new Set(tilesIdArrays).has(id));
-    const tilesArraysAddNew = tilesArrays.filter((item) => !new Set(this.tilesIdArraysOld).has(item.id));
+    const tilesArraysDeleteNew = this.tilesIdArraysOld.filter(
+      (id) => !new Set(tilesIdArrays).has(id)
+    );
+    const tilesArraysAddNew = tilesArrays.filter(
+      (item) => !new Set(this.tilesIdArraysOld).has(item.id)
+    );
     if (this.tilesIdArraysOld) {
       for (let i = 0; i < tilesArraysDeleteNew.length; i++) {
         this.tilesSetWillDelete.add(tilesArraysDeleteNew[i]);
@@ -628,7 +765,10 @@ var Universal3DSceneInterface = class {
       }
     }
     for (let i = 0; i < tilesArraysAddNew.length; i++) {
-      this.tilesMapWillAdd.set(tilesArraysAddNew[i].id, tilesArraysAddNew[i].positionArrays);
+      this.tilesMapWillAdd.set(
+        tilesArraysAddNew[i].id,
+        tilesArraysAddNew[i].positionArrays
+      );
     }
     this.tilesIdArraysOld = tilesIdArrays.slice();
     this.row = Math.floor(y);
@@ -640,11 +780,19 @@ var Universal3DSceneInterface = class {
     if (cameraPosition.height < this.requestHeight && this.getTilesArrays(cameraPosition.longitude, cameraPosition.latitude)) {
       this.tilesMapWillAdd.forEach((positionArrays, id) => {
         this.tilesMapWillAdd.delete(id);
-        this.featureFunction(this.cesiumParams, this.tilesMapRenderNow, positionArrays, id, this.renderArrayHeight);
+        this.featureFunction(
+          this.cesiumParams,
+          this.tilesMapRenderNow,
+          positionArrays,
+          id,
+          this.renderArrayHeight
+        );
       });
       this.tilesSetWillDelete.forEach((tileDelete) => {
         if (this.tilesMapRenderNow.get(tileDelete)) {
-          this.viewer.scene.primitives.remove(this.tilesMapRenderNow.get(tileDelete));
+          this.viewer.scene.primitives.remove(
+            this.tilesMapRenderNow.get(tileDelete)
+          );
           this.tilesSetWillDelete.delete(tileDelete);
           this.tilesMapRenderNow.delete(tileDelete);
         }
@@ -681,7 +829,11 @@ var LocalAndWorldTransform = class {
   WorldCoordinatesTolocal(WorldCoordinates, result) {
     if (!result)
       result = new Cesium.Cartesian3();
-    Cesium.Matrix4.multiplyByPoint(this.RCSmatrixInverse, WorldCoordinates, result);
+    Cesium.Matrix4.multiplyByPoint(
+      this.RCSmatrixInverse,
+      WorldCoordinates,
+      result
+    );
     return result;
   }
 };
@@ -741,6 +893,78 @@ var WorldPositionTransform = class {
       height: cartographicRadians.height
     };
     return result;
+  }
+};
+
+// src/core/control/camera/CameraPro.ts
+var CameraPro = class {
+  constructor(camera) {
+    this.camera = camera;
+  }
+  static cameraFlyToGraphic(params, viewer) {
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(
+        params.lon,
+        params.lat,
+        params.h
+      ),
+      orientation: {
+        heading: Cesium.Math.toRadians(params.heading),
+        pitch: Cesium.Math.toRadians(params.pitch),
+        roll: Cesium.Math.toRadians(params.roll)
+      }
+    });
+  }
+  static cameraSetViewGraphic(params, viewer) {
+    viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(
+        params.lon,
+        params.lat,
+        params.h
+      ),
+      orientation: {
+        heading: Cesium.Math.toRadians(params.heading),
+        pitch: Cesium.Math.toRadians(params.pitch),
+        roll: Cesium.Math.toRadians(params.roll)
+      }
+    });
+  }
+  static cameraSetViewFeaturesBox(geojson, viewer, options = {
+    xMultiples: 0.11,
+    yMultiples: 0.11,
+    west: 1,
+    south: 1,
+    east: 1,
+    north: 2
+  }) {
+    const featuresBox = turf.bbox(geojson);
+    const featuresBoxXAdd = (featuresBox[2] - featuresBox[0]) * options.xMultiples;
+    const featuresBoxYAdd = (featuresBox[3] - featuresBox[1]) * options.yMultiples;
+    viewer.camera.flyTo({
+      destination: Cesium.Rectangle.fromDegrees(
+        featuresBox[0] - options.west * featuresBoxXAdd,
+        featuresBox[1] - options.south * featuresBoxYAdd,
+        featuresBox[2] + options.east * featuresBoxXAdd,
+        featuresBox[3] + options.north * featuresBoxYAdd
+      )
+    });
+  }
+};
+
+// src/core/control/event/HandlerManager.ts
+var HandlerManager = class {
+  constructor() {
+    this.handlers = /* @__PURE__ */ new Map();
+  }
+  static getInstance() {
+    if (!this.Instance) {
+      this.Instance = new HandlerManager();
+    }
+    return this.Instance;
+  }
+  set(id, viewer) {
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    this.handlers.set(id, handler);
   }
 };
 
@@ -889,79 +1113,15 @@ var BaseDraw = class extends MouseListen {
   }
 };
 
-// src/core/control/camera/CameraPro.ts
-var CameraPro = class {
-  constructor(camera) {
-    this.camera = camera;
-  }
-  static cameraFlyTo(params, viewer) {
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(params.x, params.y, params.z),
-      orientation: {
-        heading: Cesium.Math.toRadians(params.heading),
-        pitch: Cesium.Math.toRadians(params.pitch),
-        roll: Cesium.Math.toRadians(params.roll)
-      }
-    });
-  }
-  static cameraSetView(params, viewer) {
-    viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(params.x, params.y, params.z),
-      orientation: {
-        heading: Cesium.Math.toRadians(params.heading),
-        pitch: Cesium.Math.toRadians(params.pitch),
-        roll: Cesium.Math.toRadians(params.roll)
-      }
-    });
-  }
-  static cameraSetViewGraphic(params, viewer) {
-    viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(params.lon, params.lat, params.h),
-      orientation: {
-        heading: Cesium.Math.toRadians(params.heading),
-        pitch: Cesium.Math.toRadians(params.pitch),
-        roll: Cesium.Math.toRadians(params.roll)
-      }
-    });
-  }
-  static cameraSetViewCartesian3(params, viewer) {
-    viewer.camera.setView({
-      destination: new Cesium.Cartesian3(params.x, params.y, params.z),
-      orientation: {
-        heading: Cesium.Math.toRadians(params.heading),
-        pitch: Cesium.Math.toRadians(params.pitch),
-        roll: Cesium.Math.toRadians(params.roll)
-      }
-    });
-  }
-};
-var a = /* @__PURE__ */ new Map();
-a.set("1", "1");
-
-// src/core/control/event/HandlerManager.ts
-var HandlerManager = class {
-  constructor() {
-    this.handlers = /* @__PURE__ */ new Map();
-  }
-  static getInstance() {
-    if (!this.Instance) {
-      this.Instance = new HandlerManager();
-    }
-    return this.Instance;
-  }
-  set(id, viewer) {
-    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-    this.handlers.set(id, handler);
-  }
-};
-
 // src/cesium-dev-help.ts
 var VERSION = "0.0.5";
 export {
+  ArrayBufferObj,
   BaseDraw,
   CameraPro,
   CesiumPrimitivesProvider,
   ComputationalGeom,
+  Geojson2ArrayBufferObj,
   HandlerManager,
   HoleDraw,
   InitViewer,
@@ -973,6 +1133,7 @@ export {
   RenderGlb,
   RenderInstance,
   RenderSimple,
+  Shp2ArrayBufferObj,
   TranslateSevenParams,
   Universal3DSceneInterface,
   VERSION,
