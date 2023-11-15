@@ -1,8 +1,8 @@
 export const VERSION = '0.0.5';
-export { ComputationalGeom } from './core/math/ComputationalGeom'
 export { InitViewer } from './core/init/InitViewer'
 export { ViwerSet } from './core/init/ViwerSet'
 export { HoleDraw } from './core/mouse/HoleDraw'
+export { ComputationalGeom } from './core/math/ComputationalGeom'
 export { LibManager } from './core/outsource/LibManager'
 export { ArrayBufferObj } from './core/parse/ArrayBufferObj'
 export { Geojson2ArrayBufferObj } from './core/parse/Geojson2ArrayBufferObj'
